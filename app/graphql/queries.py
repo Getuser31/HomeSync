@@ -1,18 +1,41 @@
 import strawberry
 from typing import List
+
+from app.graphql.types import Task
 from .types import Task
+from ..database import SessionLocal
+from ..models import Task as TaskModel
 
 @strawberry.type
 class TaskQueries:
     @strawberry.field
     def get_tasks(self) -> List[Task]:
-        ##Add DB Logic
-        return [
-            Task(id=1, title="Laundry", description="Wash and dry clothes"),
-            Task(id=2, title="Cleaning", description="Vacuum the living room")
-        ]
+        db = SessionLocal()
+        try:
+            tasks = db.query(TaskModel).all()
+            return [
+                Task(
+                    id=t.id, 
+                    title=t.title, 
+                    description=t.description, 
+                    is_completed=t.is_completed
+                ) for t in tasks
+            ]
+        finally:
+            db.close()
 
     @strawberry.field
-    def get_task_by_id(self, id: int) -> Task:
-        ##Add DB Logic
-        return Task(id=id, title="Laundry", description="Wash and dry clothes")
+    def get_task_by_id(self, id: int) -> Task | None:
+        db = SessionLocal()
+        try:
+            t = db.query(TaskModel).filter(TaskModel.id == id).first()
+            if t:
+                return Task(
+                    id=t.id, 
+                    title=t.title, 
+                    description=t.description, 
+                    is_completed=t.is_completed
+                )
+            return None
+        finally:
+            db.close()

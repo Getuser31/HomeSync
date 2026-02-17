@@ -4,18 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="init commit">
-      <change afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/database.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/graphql/schema.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docker-compose.yml" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/schema.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +34,9 @@
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
+  </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="AISelfReview" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -78,10 +73,10 @@
 }]]></component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1773300762143" />
-    <option name="spentUsd" value="0.0153868" />
+    <option name="spentUsd" value="0.03555905" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="6" />
+    <option name="suspendCountdown" value="5" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -123,7 +118,7 @@
       <option name="presentableId" value="Default" />
       <updated>1771250272312</updated>
       <workItem from="1771250273364" duration="2179000" />
-      <workItem from="1771316945342" duration="5030000" />
+      <workItem from="1771316945342" duration="6510000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -133,7 +128,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771317776486</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`.">
+      <option name="closed" value="true" />
+      <created>1771322066309</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1771322066309</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -141,7 +144,8 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="init commit" />
-    <option name="LAST_COMMIT_MESSAGE" value="init commit" />
+    <MESSAGE value="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
