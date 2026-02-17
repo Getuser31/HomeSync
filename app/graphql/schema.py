@@ -1,13 +1,13 @@
 import strawberry
-from .queries import TaskQueries
-from .mutations import TaskMutations
+from .queries import TaskQueries, UserQueries
+from .mutations import TaskMutations, UserMutations
 
 @strawberry.type
-class Query(TaskQueries):
+class Query(TaskQueries, UserQueries):
     pass
 
 @strawberry.type
-class Mutation(TaskMutations):
+class Mutation(TaskMutations, UserMutations):
     pass
 
 schema = strawberry.Schema(query=Query, mutation=Mutation)
