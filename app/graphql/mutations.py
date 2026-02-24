@@ -1,9 +1,13 @@
 import strawberry
 from typing import Optional
-from .types import Task, User
+
+from .types import Task, User, TaskCategory, Assignment, House
 from ..database import SessionLocal
 from ..models import Task as TaskModel
+from ..models import TaskCategory as TaskCategoryModel
+from ..models import House as HouseModel
 from ..models import User as UserModel
+from ..services.house_service import _generate_invite_code
 
 
 @strawberry.type
@@ -20,6 +24,19 @@ class TaskMutations:
         finally:
             db.close()
 
+    @strawberry.mutation
+    def create_task_category(self, name: str) -> TaskCategory:
+        db = SessionLocal()
+        try:
+            taskCategory = TaskCategoryModel(name=name)
+            db.add(taskCategory)
+            db.commit()
+            db.refresh(taskCategory)
+            return TaskCategory(id=taskCategory.id, name=taskCategory.name)
+        finally:
+            db.close()
+
+
 
 @strawberry.type
 class UserMutations:
@@ -35,6 +52,28 @@ class UserMutations:
                 id=new_user.id,
                 email=new_user.email,
                 is_active=new_user.is_active
+            )
+        finally:
+            db.close()
+
+
+@strawberry.type
+class HouseMutations:
+    @strawberry.mutation
+    def create_house(self, name: str) -> House:
+        db = SessionLocal()
+        try:
+            invite_code = _generate_invite_code()
+
+            new_house = HouseModel(name=name, invite_code=invite_code)
+            db.add(new_house)
+            db.commit()
+            db.refresh(new_house)
+
+            return House(
+                id=new_house.id,
+                name=new_house.name,
+                invite_code=new_house.invite_code
             )
         finally:
             db.close()

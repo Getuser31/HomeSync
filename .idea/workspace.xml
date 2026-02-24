@@ -4,16 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table.">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/329e01db1f83_add_relationship_between_users_and_.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/3efca905994b_add_house_table_and_generate_.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/635e5e4177d3_add_taskcategories_table_relationship.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/d9a5b5428d99_add_assignement_table_relationship.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/e21b25dde185_relationship_fix.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/alembic/versions/f63ef1eaf881_add_relationship_between_users_and_.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add house and task management features&#10;&#10;- Introduce `House` and `TaskCategory` models in `app/models.py` with necessary relationships.&#10;- Define GraphQL types for `House`, `TaskCategory`, and `Assignment`.&#10;- Create Alembic migrations for new tables and relationships:&#10;  - Add `houses` table and relationship with `tasks`.&#10;  - Add `task_categories` table and relationship with `tasks`.&#10;  - Add `assignments` table and relationships with `users` and `tasks`.&#10;- Update existing GraphQL types and models to include new relationships.">
+      <change afterPath="$PROJECT_DIR$/app/services/house_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/schema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -29,8 +25,8 @@
       <list>
         <option value="FastAPI main" />
         <option value="FastAPI test_main" />
-        <option value="Python Script" />
         <option value="Dockerfile" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -42,6 +38,18 @@
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
+  <component name="GitHubPullRequestSearchHistory">{
+  &quot;lastFilter&quot;: {
+    &quot;state&quot;: &quot;OPEN&quot;,
+    &quot;assignee&quot;: &quot;Getuser31&quot;
+  }
+}</component>
+  <component name="GithubPullRequestsUISettings">{
+  &quot;selectedUrlAndAccountId&quot;: {
+    &quot;url&quot;: &quot;https://github.com/Getuser31/HomeSync.git&quot;,
+    &quot;accountId&quot;: &quot;03686042-26e8-4067-8279-1c8cb5f4fefc&quot;
+  }
+}</component>
   <component name="McpProjectServerCommands">
     <commands />
     <urls />
@@ -85,10 +93,10 @@
 }</component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1773300762143" />
-    <option name="spentUsd" value="0.065118805" />
+    <option name="spentUsd" value="0.0740381" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="8" />
+    <option name="suspendCountdown" value="9" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -134,6 +142,11 @@
       <workItem from="1771835260934" duration="2587000" />
       <workItem from="1771837889820" duration="201000" />
       <workItem from="1771838101529" duration="1139000" />
+      <workItem from="1771922121743" duration="314000" />
+      <workItem from="1771922438285" duration="1270000" />
+      <workItem from="1771923727786" duration="80000" />
+      <workItem from="1771923817695" duration="2765000" />
+      <workItem from="1771926681273" duration="19000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -175,7 +188,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771339923883</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Add house and task management features&#10;&#10;- Introduce `House` and `TaskCategory` models in `app/models.py` with necessary relationships.&#10;- Define GraphQL types for `House`, `TaskCategory`, and `Assignment`.&#10;- Create Alembic migrations for new tables and relationships:&#10;  - Add `houses` table and relationship with `tasks`.&#10;  - Add `task_categories` table and relationship with `tasks`.&#10;  - Add `assignments` table and relationships with `users` and `tasks`.&#10;- Update existing GraphQL types and models to include new relationships.">
+      <option name="closed" value="true" />
+      <created>1771922153465</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1771922153465</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -186,7 +207,8 @@
     <MESSAGE value="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`." />
     <MESSAGE value="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table." />
     <MESSAGE value="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table." />
+    <MESSAGE value="Add house and task management features&#10;&#10;- Introduce `House` and `TaskCategory` models in `app/models.py` with necessary relationships.&#10;- Define GraphQL types for `House`, `TaskCategory`, and `Assignment`.&#10;- Create Alembic migrations for new tables and relationships:&#10;  - Add `houses` table and relationship with `tasks`.&#10;  - Add `task_categories` table and relationship with `tasks`.&#10;  - Add `assignments` table and relationships with `users` and `tasks`.&#10;- Update existing GraphQL types and models to include new relationships." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add house and task management features&#10;&#10;- Introduce `House` and `TaskCategory` models in `app/models.py` with necessary relationships.&#10;- Define GraphQL types for `House`, `TaskCategory`, and `Assignment`.&#10;- Create Alembic migrations for new tables and relationships:&#10;  - Add `houses` table and relationship with `tasks`.&#10;  - Add `task_categories` table and relationship with `tasks`.&#10;  - Add `assignments` table and relationships with `users` and `tasks`.&#10;- Update existing GraphQL types and models to include new relationships." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
@@ -196,10 +218,6 @@
         <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
           <url>file://$PROJECT_DIR$/app/graphql/types.py</url>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
-          <url>file://$PROJECT_DIR$/app/graphql/mutations.py</url>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

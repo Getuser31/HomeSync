@@ -1,6 +1,7 @@
 import strawberry
 from typing import Optional, List
 from datetime import datetime
+from dataclasses import field
 
 @strawberry.type
 class Task:
@@ -15,7 +16,7 @@ class User:
     id: int
     email: str
     is_active: bool = True
-    houses: List["House"]
+    houses: List["House"] = field(default_factory=list)
 
 
 @strawberry.type
@@ -23,8 +24,8 @@ class House:
     id: int
     name: str
     invite_code: str
-    users: List[User]
-    tasks: List[Task]
+    users: List[User] = field(default_factory=list)
+    tasks: List[Task] = field(default_factory=list)
 
 
 @strawberry.type
