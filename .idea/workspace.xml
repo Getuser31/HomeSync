@@ -4,12 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table.">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/9404823c4125_add_user_table.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table.">
+      <change afterPath="$PROJECT_DIR$/alembic/versions/329e01db1f83_add_relationship_between_users_and_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/3efca905994b_add_house_table_and_generate_.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/635e5e4177d3_add_taskcategories_table_relationship.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/d9a5b5428d99_add_assignement_table_relationship.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/e21b25dde185_relationship_fix.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/alembic/versions/f63ef1eaf881_add_relationship_between_users_and_.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/schema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
     </list>
@@ -19,7 +21,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="8" />
+    <option name="cachedIndexableFilesCount" value="40" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -55,31 +57,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "FastAPI.HomeSync.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "ai.playground.ignore.import.keys.banner.in.settings": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;FastAPI.HomeSync.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1773300762143" />
     <option name="spentUsd" value="0.065118805" />
@@ -114,8 +117,8 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.30387.173" />
-        <option value="bundled-python-sdk-4762d8aabb82-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.30387.173" />
+        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
+        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
       </set>
     </attachedChunks>
   </component>
@@ -127,7 +130,10 @@
       <option name="presentableId" value="Default" />
       <updated>1771250272312</updated>
       <workItem from="1771250273364" duration="2179000" />
-      <workItem from="1771316945342" duration="11103000" />
+      <workItem from="1771316945342" duration="11179000" />
+      <workItem from="1771835260934" duration="2587000" />
+      <workItem from="1771837889820" duration="201000" />
+      <workItem from="1771838101529" duration="1139000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -161,7 +167,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771337652161</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table.">
+      <option name="closed" value="true" />
+      <created>1771339923883</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1771339923883</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -171,7 +185,8 @@
     <MESSAGE value="init commit" />
     <MESSAGE value="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`." />
     <MESSAGE value="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table." />
+    <MESSAGE value="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
