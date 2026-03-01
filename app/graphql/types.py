@@ -9,7 +9,7 @@ class Task:
     title: str
     description: Optional[str] = None
     is_completed: bool = False
-    house: "House"
+    house: Optional["House"] = None
 
 @strawberry.type
 class User:
