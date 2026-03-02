@@ -15,6 +15,7 @@ class Task:
 class User:
     id: int
     email: str
+    name: str
     is_active: bool = True
     houses: List["House"] = field(default_factory=list)
 

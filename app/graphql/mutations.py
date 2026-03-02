@@ -6,7 +6,7 @@ from ..models import Task as TaskModel
 from ..models import TaskCategory as TaskCategoryModel
 from ..models import House as HouseModel
 from ..models import User as UserModel
-from ..services.house_service import _generate_invite_code
+from ..services.house_service import generate_unique_invite_code
 from strawberry.types import Info
 
 
@@ -40,13 +40,14 @@ class UserMutations:
     def create_user(self, info: Info, email: str, hashed_password: str) -> User:
         db = info.context["db"]
 
-        new_user = UserModel(email=email, hashed_password=hashed_password)
+        new_user = UserModel(email=email, name=name, hashed_password=hashed_password)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
         return User(
             id=new_user.id,
             email=new_user.email,
+            name=new_user.name,
             is_active=new_user.is_active
         )
 
@@ -57,7 +58,7 @@ class HouseMutations:
     def create_house(self, info: Info, name: str) -> House:
         db = info.context["db"]
 
-        invite_code = _generate_invite_code()
+        invite_code = generate_unique_invite_code(db)
 
         new_house = HouseModel(name=name, invite_code=invite_code)
         db.add(new_house)
@@ -68,4 +69,22 @@ class HouseMutations:
             id=new_house.id,
             name=new_house.name,
             invite_code=new_house.invite_code
+        )
+
+    @strawberry.mutation
+    def add_user_to_house(self, info: Info, user_id: int, house_id: int) -> House:
+        db = info.context["db"]
+        house = db.query(HouseModel).filter(HouseModel.id == house_id).first()
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if house and user:
+            house.users.append(user)
+            db.commit()
+            db.refresh(house)
+        else:
+            raise ValueError("House or user not found")
+
+        return House(
+            id=house.id,
+            name=house.name,
+            invite_code=house.invite_code
         )

@@ -4,13 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add README for project setup and usage&#10;&#10;- Provide project overview, tech stack, requirements, and API usage details.&#10;- Include setup instructions for dependencies, migrations, and server startup.&#10;- Outline project structure, environment variables, and testing information.&#10;- Add placeholders for license and dependency management files.">
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency.">
+      <change afterPath="$PROJECT_DIR$/alembic/versions/7c9f558f849d_add_name_column_on_the_user_table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/schema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/services/house_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/house_service.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,10 +99,10 @@
 }</component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1773300762143" />
-    <option name="spentUsd" value="0.1317729" />
+    <option name="spentUsd" value="0.14102496" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="3" />
+    <option name="suspendCountdown" value="9" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -154,7 +156,8 @@
       <workItem from="1771926709384" duration="1750000" />
       <workItem from="1772012668513" duration="2356000" />
       <workItem from="1772382859149" duration="41000" />
-      <workItem from="1772382912076" duration="1265000" />
+      <workItem from="1772382912076" duration="3099000" />
+      <workItem from="1772440483983" duration="3400000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -212,7 +215,15 @@
       <option name="project" value="LOCAL" />
       <updated>1771926823770</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency.">
+      <option name="closed" value="true" />
+      <created>1772398891667</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1772398891667</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -236,7 +247,9 @@
     <MESSAGE value="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table." />
     <MESSAGE value="Add house and task management features&#10;&#10;- Introduce `House` and `TaskCategory` models in `app/models.py` with necessary relationships.&#10;- Define GraphQL types for `House`, `TaskCategory`, and `Assignment`.&#10;- Create Alembic migrations for new tables and relationships:&#10;  - Add `houses` table and relationship with `tasks`.&#10;  - Add `task_categories` table and relationship with `tasks`.&#10;  - Add `assignments` table and relationships with `users` and `tasks`.&#10;- Update existing GraphQL types and models to include new relationships." />
     <MESSAGE value="Add GraphQL mutations and utility for house creation&#10;&#10;- Add `HouseMutations` to support house creation via GraphQL.&#10;- Implement `_generate_invite_code` utility in `house_service.py` for unique invite codes.&#10;- Update GraphQL schema to include house-related mutations.&#10;- Introduce `field(default_factory=list)` for safer list initialization in `GraphQL` types.&#10;- Add `create_task_category` mutation for task category handling." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add GraphQL mutations and utility for house creation&#10;&#10;- Add `HouseMutations` to support house creation via GraphQL.&#10;- Implement `_generate_invite_code` utility in `house_service.py` for unique invite codes.&#10;- Update GraphQL schema to include house-related mutations.&#10;- Introduce `field(default_factory=list)` for safer list initialization in `GraphQL` types.&#10;- Add `create_task_category` mutation for task category handling." />
+    <MESSAGE value="Add README for project setup and usage&#10;&#10;- Provide project overview, tech stack, requirements, and API usage details.&#10;- Include setup instructions for dependencies, migrations, and server startup.&#10;- Outline project structure, environment variables, and testing information.&#10;- Add placeholders for license and dependency management files." />
+    <MESSAGE value="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
