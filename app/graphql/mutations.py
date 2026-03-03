@@ -1,13 +1,16 @@
 import strawberry
 from typing import Optional
 
-from .types import Task, User, TaskCategory, Assignment, House
+from .types import Task, User, UserError, CreateUserResult, AuthPayload, LoginResult, TaskCategory, Assignment, House
 from ..models import Task as TaskModel
 from ..models import TaskCategory as TaskCategoryModel
 from ..models import House as HouseModel
 from ..models import User as UserModel
 from ..services.house_service import generate_unique_invite_code
+from ..services.user_login import login_user
 from strawberry.types import Info
+from passlib.hash import bcrypt
+from passlib.context import CryptContext
 
 
 @strawberry.type
@@ -37,10 +40,18 @@ def create_task_category(self, info: Info, name: str) -> TaskCategory:
 @strawberry.type
 class UserMutations:
     @strawberry.mutation
-    def create_user(self, info: Info, email: str, hashed_password: str) -> User:
+    def create_user(self, info: Info, username: str, email: str, password: str) -> CreateUserResult:
         db = info.context["db"]
 
-        new_user = UserModel(email=email, name=name, hashed_password=hashed_password)
+        email = email.lower()
+
+        if db.query(UserModel).filter(UserModel.email == email).first():
+            return UserError(message=f"An account with email '{email}' already exists.")
+
+        pwd_context = CryptContext(schemes=["bcrypt"])
+        hashed_password = pwd_context.hash(password)
+
+        new_user = UserModel(name=username, email=email, hashed_password=hashed_password)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
@@ -50,6 +61,14 @@ class UserMutations:
             name=new_user.name,
             is_active=new_user.is_active
         )
+
+    @strawberry.mutation
+    def login(self, info: Info, email: str, password: str) -> LoginResult:
+        db = info.context["db"]
+        token = login_user(db, email, password)
+        if token is None:
+            return UserError(message="Invalid email or password.")
+        return AuthPayload(token=token)
 
 
 @strawberry.type

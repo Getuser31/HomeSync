@@ -30,6 +30,22 @@ class House:
 
 
 @strawberry.type
+class UserError:
+    message: str
+
+
+CreateUserResult = strawberry.union("CreateUserResult", types=(User, UserError))
+
+
+@strawberry.type
+class AuthPayload:
+    token: str
+
+
+LoginResult = strawberry.union("LoginResult", types=(AuthPayload, UserError))
+
+
+@strawberry.type
 class TaskCategory:
     id: int
     name: str

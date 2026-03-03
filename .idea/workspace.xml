@@ -4,15 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency.">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/7c9f558f849d_add_name_column_on_the_user_table.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add `name` field to `User` model and enhance house-related GraphQL features&#10;&#10;- Add `name` column to `users` table via Alembic migration.  &#10;- Update `User` GraphQL type, queries, and mutations to include `name`.  &#10;- Enhance `House` functionality in GraphQL:  &#10;  - Add `get_house_by_invite_code` query.  &#10;  - Introduce `add_user_to_house` mutation.  &#10;- Refactor `house_service` to include `generate_unique_invite_code` utility.  &#10;- Update schema to include `HouseQueries` and refactored `HouseMutations`.">
+      <change afterPath="$PROJECT_DIR$/app/auth.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/services/user_login.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/config.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/database.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/database.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/schema.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/services/house_service.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/services/house_service.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -20,7 +20,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="42" />
+    <option name="cachedIndexableFilesCount" value="47" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -99,10 +99,10 @@
 }</component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1773300762143" />
-    <option name="spentUsd" value="0.14102496" />
+    <option name="spentUsd" value="0.28551292" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="9" />
+    <option name="suspendCountdown" value="0" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -157,7 +157,8 @@
       <workItem from="1772012668513" duration="2356000" />
       <workItem from="1772382859149" duration="41000" />
       <workItem from="1772382912076" duration="3099000" />
-      <workItem from="1772440483983" duration="3400000" />
+      <workItem from="1772440483983" duration="13879000" />
+      <workItem from="1772526237982" duration="5940000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -223,7 +224,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772398891667</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Add `name` field to `User` model and enhance house-related GraphQL features&#10;&#10;- Add `name` column to `users` table via Alembic migration.  &#10;- Update `User` GraphQL type, queries, and mutations to include `name`.  &#10;- Enhance `House` functionality in GraphQL:  &#10;  - Add `get_house_by_invite_code` query.  &#10;  - Introduce `add_user_to_house` mutation.  &#10;- Refactor `house_service` to include `generate_unique_invite_code` utility.  &#10;- Update schema to include `HouseQueries` and refactored `HouseMutations`.">
+      <option name="closed" value="true" />
+      <created>1772443909153</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1772443909153</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -249,11 +258,12 @@
     <MESSAGE value="Add GraphQL mutations and utility for house creation&#10;&#10;- Add `HouseMutations` to support house creation via GraphQL.&#10;- Implement `_generate_invite_code` utility in `house_service.py` for unique invite codes.&#10;- Update GraphQL schema to include house-related mutations.&#10;- Introduce `field(default_factory=list)` for safer list initialization in `GraphQL` types.&#10;- Add `create_task_category` mutation for task category handling." />
     <MESSAGE value="Add README for project setup and usage&#10;&#10;- Provide project overview, tech stack, requirements, and API usage details.&#10;- Include setup instructions for dependencies, migrations, and server startup.&#10;- Outline project structure, environment variables, and testing information.&#10;- Add placeholders for license and dependency management files." />
     <MESSAGE value="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency." />
-    <option name="LAST_COMMIT_MESSAGE" value="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency." />
+    <MESSAGE value="Add `name` field to `User` model and enhance house-related GraphQL features&#10;&#10;- Add `name` column to `users` table via Alembic migration.  &#10;- Update `User` GraphQL type, queries, and mutations to include `name`.  &#10;- Enhance `House` functionality in GraphQL:  &#10;  - Add `get_house_by_invite_code` query.  &#10;  - Introduce `add_user_to_house` mutation.  &#10;- Refactor `house_service` to include `generate_unique_invite_code` utility.  &#10;- Update schema to include `HouseQueries` and refactored `HouseMutations`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `name` field to `User` model and enhance house-related GraphQL features&#10;&#10;- Add `name` column to `users` table via Alembic migration.  &#10;- Update `User` GraphQL type, queries, and mutations to include `name`.  &#10;- Enhance `House` functionality in GraphQL:  &#10;  - Add `get_house_by_invite_code` query.  &#10;  - Introduce `add_user_to_house` mutation.  &#10;- Refactor `house_service` to include `generate_unique_invite_code` utility.  &#10;- Update schema to include `HouseQueries` and refactored `HouseMutations`." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1771970725700" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1772526241654" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>
