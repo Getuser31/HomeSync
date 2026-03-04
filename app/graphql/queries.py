@@ -6,6 +6,7 @@ from ..models import Task as TaskModel
 from ..models import User as UserModel
 from ..models import House as HouseModel
 from strawberry.types import Info
+from sqlalchemy.orm import joinedload
 
 
 @strawberry.type
@@ -86,13 +87,28 @@ class HouseQueries:
     @strawberry.field
     def get_house_by_user(self, info: Info) -> List[House] | None:
         db = info.context["db"]
+        if info.context.get("token_expired"):
+            raise ValueError("TOKEN_EXPIRED")
         user_id = info.context.get("user_id")
         if not user_id:
             return None
-        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        user = (
+            db.query(UserModel)
+            .options(joinedload(UserModel.houses).joinedload(HouseModel.users))
+            .filter(UserModel.id == user_id)
+            .first()
+        )
         if not user:
             return None
         return [
-            House(id=h.id, name=h.name, invite_code=h.invite_code)
+            House(
+                id=h.id,
+                name=h.name,
+                invite_code=h.invite_code,
+                users=[
+                    User(id=u.id, name=u.name, email=u.email, is_active=u.is_active)
+                    for u in h.users
+                ],
+            )
             for h in user.houses
         ]

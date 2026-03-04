@@ -77,7 +77,11 @@ class HouseMutations:
     @strawberry.mutation
     def create_house(self, info: Info, name: str) -> HouseError | House:
         db = info.context["db"]
+        if info.context.get("token_expired"):
+            return HouseError(message="TOKEN_EXPIRED")
         user_id = info.context.get("user_id")
+        if not user_id:
+            return HouseError(message="User not authenticated.")
 
         invite_code = generate_unique_invite_code(db)
 
@@ -98,6 +102,29 @@ class HouseMutations:
             id=new_house.id,
             name=new_house.name,
             invite_code=new_house.invite_code
+        )
+
+    @strawberry.mutation
+    def join_house_by_invitation_code(self, info: Info, invite_code: str) -> HouseError | House:
+        db = info.context["db"]
+        if info.context.get("token_expired"):
+            return HouseError(message="TOKEN_EXPIRED")
+        user_id = info.context.get("user_id")
+        if not user_id:
+            return HouseError(message="User not authenticated.")
+        house = db.query(HouseModel).filter(HouseModel.invite_code == invite_code).first()
+        if not house:
+            return HouseError(message="House not found")
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return HouseError(message="User not found")
+        house.users.append(user)
+        db.commit()
+        db.refresh(house)
+        return House(
+            id=house.id,
+            name=house.name,
+            invite_code=house.invite_code
         )
 
     @strawberry.mutation

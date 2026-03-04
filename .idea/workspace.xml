@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="feat: Implement user authentication with JWT&#10;•&#10;Add user registration with password hashing using passlib.&#10;•&#10;Implement a login mutation that returns a JWT token on successful authentication.&#10;•&#10;Create an auth.py service to handle JWT token creation.&#10;•&#10;Add user_login.py service for user login logic.&#10;•&#10;Introduce UserError and AuthPayload types for clearer GraphQL responses.&#10;•&#10;Configure CORS middleware to allow frontend requests.&#10;•&#10;Centralize environment variables in a config.py file.">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add user context and enhance house-related GraphQL functionality&#10;&#10;- Include `user_id` in GraphQL request context for authentication.&#10;- Add `get_house_by_user` query to retrieve user-associated houses.&#10;- Introduce `HouseError` type and enhance GraphQL mutations for better error handling.&#10;- Update `create_house` mutation to associate newly created houses with users.&#10;- Decode JWT tokens in `auth.py` to extract user information.">
       <change beforePath="$PROJECT_DIR$/app/auth.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/auth.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -157,7 +155,7 @@
       <workItem from="1772382912076" duration="3099000" />
       <workItem from="1772440483983" duration="13879000" />
       <workItem from="1772526237982" duration="11144000" />
-      <workItem from="1772615390513" duration="2097000" />
+      <workItem from="1772615390513" duration="5877000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -239,7 +237,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772533996520</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="Add user context and enhance house-related GraphQL functionality&#10;&#10;- Include `user_id` in GraphQL request context for authentication.&#10;- Add `get_house_by_user` query to retrieve user-associated houses.&#10;- Introduce `HouseError` type and enhance GraphQL mutations for better error handling.&#10;- Update `create_house` mutation to associate newly created houses with users.&#10;- Decode JWT tokens in `auth.py` to extract user information.">
+      <option name="closed" value="true" />
+      <created>1772617506995</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1772617506995</updated>
+    </task>
+    <option name="localTasksCounter" value="12" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -267,7 +273,8 @@
     <MESSAGE value="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency." />
     <MESSAGE value="Add `name` field to `User` model and enhance house-related GraphQL features&#10;&#10;- Add `name` column to `users` table via Alembic migration.  &#10;- Update `User` GraphQL type, queries, and mutations to include `name`.  &#10;- Enhance `House` functionality in GraphQL:  &#10;  - Add `get_house_by_invite_code` query.  &#10;  - Introduce `add_user_to_house` mutation.  &#10;- Refactor `house_service` to include `generate_unique_invite_code` utility.  &#10;- Update schema to include `HouseQueries` and refactored `HouseMutations`." />
     <MESSAGE value="feat: Implement user authentication with JWT&#10;•&#10;Add user registration with password hashing using passlib.&#10;•&#10;Implement a login mutation that returns a JWT token on successful authentication.&#10;•&#10;Create an auth.py service to handle JWT token creation.&#10;•&#10;Add user_login.py service for user login logic.&#10;•&#10;Introduce UserError and AuthPayload types for clearer GraphQL responses.&#10;•&#10;Configure CORS middleware to allow frontend requests.&#10;•&#10;Centralize environment variables in a config.py file." />
-    <option name="LAST_COMMIT_MESSAGE" value="feat: Implement user authentication with JWT&#10;•&#10;Add user registration with password hashing using passlib.&#10;•&#10;Implement a login mutation that returns a JWT token on successful authentication.&#10;•&#10;Create an auth.py service to handle JWT token creation.&#10;•&#10;Add user_login.py service for user login logic.&#10;•&#10;Introduce UserError and AuthPayload types for clearer GraphQL responses.&#10;•&#10;Configure CORS middleware to allow frontend requests.&#10;•&#10;Centralize environment variables in a config.py file." />
+    <MESSAGE value="Add user context and enhance house-related GraphQL functionality&#10;&#10;- Include `user_id` in GraphQL request context for authentication.&#10;- Add `get_house_by_user` query to retrieve user-associated houses.&#10;- Introduce `HouseError` type and enhance GraphQL mutations for better error handling.&#10;- Update `create_house` mutation to associate newly created houses with users.&#10;- Decode JWT tokens in `auth.py` to extract user information." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add user context and enhance house-related GraphQL functionality&#10;&#10;- Include `user_id` in GraphQL request context for authentication.&#10;- Add `get_house_by_user` query to retrieve user-associated houses.&#10;- Introduce `HouseError` type and enhance GraphQL mutations for better error handling.&#10;- Update `create_house` mutation to associate newly created houses with users.&#10;- Decode JWT tokens in `auth.py` to extract user information." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
