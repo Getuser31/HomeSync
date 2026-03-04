@@ -1,7 +1,9 @@
 import strawberry
 from typing import Optional
 
-from .types import Task, User, UserError, CreateUserResult, AuthPayload, LoginResult, TaskCategory, Assignment, House
+from app.graphql.types import House, HouseError
+from .types import Task, User, UserError, CreateUserResult, AuthPayload, LoginResult, TaskCategory, Assignment, House, \
+    HouseError
 from ..models import Task as TaskModel
 from ..models import TaskCategory as TaskCategoryModel
 from ..models import House as HouseModel
@@ -9,7 +11,6 @@ from ..models import User as UserModel
 from ..services.house_service import generate_unique_invite_code
 from ..services.user_login import login_user
 from strawberry.types import Info
-from passlib.hash import bcrypt
 from passlib.context import CryptContext
 
 
@@ -74,13 +75,22 @@ class UserMutations:
 @strawberry.type
 class HouseMutations:
     @strawberry.mutation
-    def create_house(self, info: Info, name: str) -> House:
+    def create_house(self, info: Info, name: str) -> HouseError | House:
         db = info.context["db"]
+        user_id = info.context.get("user_id")
 
         invite_code = generate_unique_invite_code(db)
 
         new_house = HouseModel(name=name, invite_code=invite_code)
         db.add(new_house)
+        db.commit()
+        db.refresh(new_house)
+
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return HouseError(message="User not found.")
+
+        new_house.users.append(user)
         db.commit()
         db.refresh(new_house)
 

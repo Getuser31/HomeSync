@@ -82,3 +82,17 @@ class HouseQueries:
                 invite_code=house.invite_code
             )
         return None
+
+    @strawberry.field
+    def get_house_by_user(self, info: Info) -> List[House] | None:
+        db = info.context["db"]
+        user_id = info.context.get("user_id")
+        if not user_id:
+            return None
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return None
+        return [
+            House(id=h.id, name=h.name, invite_code=h.invite_code)
+            for h in user.houses
+        ]

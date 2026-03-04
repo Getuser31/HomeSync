@@ -3,6 +3,7 @@ from typing import Optional, List
 from datetime import datetime
 from dataclasses import field
 
+
 @strawberry.type
 class Task:
     id: int
@@ -10,6 +11,7 @@ class Task:
     description: Optional[str] = None
     is_completed: bool = False
     house: Optional["House"] = None
+
 
 @strawberry.type
 class User:
@@ -33,7 +35,6 @@ class House:
 class UserError:
     message: str
 
-
 CreateUserResult = strawberry.union("CreateUserResult", types=(User, UserError))
 
 
@@ -41,8 +42,16 @@ CreateUserResult = strawberry.union("CreateUserResult", types=(User, UserError))
 class AuthPayload:
     token: str
 
-
 LoginResult = strawberry.union("LoginResult", types=(AuthPayload, UserError))
+
+
+@strawberry.type
+class HouseError:
+    message: str
+
+
+CreateHouseResult = strawberry.union("CreateHouseResult", types=(House, HouseError))
+
 
 
 @strawberry.type
