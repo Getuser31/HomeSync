@@ -4,12 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add token expiration checks and enhance house-related GraphQL features&#10;&#10;- Handle expired JWT tokens in `auth.py` and enhance `decode_access_token` to return `token_expired` status.&#10;- Update GraphQL context in `main.py` to include `token_expired` flag.&#10;- Add checks for token expiration in `create_house` and `get_house_by_user` mutations/queries.&#10;- Introduce `join_house_by_invitation_code` mutation for joining a house using an invite code.&#10;- Improve user and house associations with support for nested user data in `get_house_by_user`.">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/ae576a5ad968_add_tasks_tables.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add task recurrence, assignments, and completion tracking&#10;&#10;- Introduce `TaskRecurrence`, `TaskLife`, and `TaskCompletion` models with corresponding Alembic migration.&#10;- Update GraphQL types to include new task-related entities and relationships.&#10;- Refactor `Task` model to remove `is_completed` field and add `weight` attribute.&#10;- Remove deprecated `TaskCategory` and `Assignment` models.&#10;- Add `get_house_by_id` query to improve house querying logic.&#10;- Enhance task management features with support for recurring tasks and completion tracking.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/schema.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -96,10 +95,10 @@
 }</component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1773300762143" />
-    <option name="spentUsd" value="0.29549918" />
+    <option name="spentUsd" value="0.5889794" />
   </component>
   <component name="RecapUselessUpdatesCounter">
-    <option name="suspendCountdown" value="9" />
+    <option name="suspendCountdown" value="1" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
@@ -157,7 +156,7 @@
       <workItem from="1772440483983" duration="13879000" />
       <workItem from="1772526237982" duration="11144000" />
       <workItem from="1772615390513" duration="10510000" />
-      <workItem from="1772697811728" duration="3695000" />
+      <workItem from="1772697811728" duration="10940000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -255,7 +254,15 @@
       <option name="project" value="LOCAL" />
       <updated>1772621291558</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="Add task recurrence, assignments, and completion tracking&#10;&#10;- Introduce `TaskRecurrence`, `TaskLife`, and `TaskCompletion` models with corresponding Alembic migration.&#10;- Update GraphQL types to include new task-related entities and relationships.&#10;- Refactor `Task` model to remove `is_completed` field and add `weight` attribute.&#10;- Remove deprecated `TaskCategory` and `Assignment` models.&#10;- Add `get_house_by_id` query to improve house querying logic.&#10;- Enhance task management features with support for recurring tasks and completion tracking.">
+      <option name="closed" value="true" />
+      <created>1772701633674</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1772701633674</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -285,11 +292,12 @@
     <MESSAGE value="feat: Implement user authentication with JWT&#10;•&#10;Add user registration with password hashing using passlib.&#10;•&#10;Implement a login mutation that returns a JWT token on successful authentication.&#10;•&#10;Create an auth.py service to handle JWT token creation.&#10;•&#10;Add user_login.py service for user login logic.&#10;•&#10;Introduce UserError and AuthPayload types for clearer GraphQL responses.&#10;•&#10;Configure CORS middleware to allow frontend requests.&#10;•&#10;Centralize environment variables in a config.py file." />
     <MESSAGE value="Add user context and enhance house-related GraphQL functionality&#10;&#10;- Include `user_id` in GraphQL request context for authentication.&#10;- Add `get_house_by_user` query to retrieve user-associated houses.&#10;- Introduce `HouseError` type and enhance GraphQL mutations for better error handling.&#10;- Update `create_house` mutation to associate newly created houses with users.&#10;- Decode JWT tokens in `auth.py` to extract user information." />
     <MESSAGE value="Add token expiration checks and enhance house-related GraphQL features&#10;&#10;- Handle expired JWT tokens in `auth.py` and enhance `decode_access_token` to return `token_expired` status.&#10;- Update GraphQL context in `main.py` to include `token_expired` flag.&#10;- Add checks for token expiration in `create_house` and `get_house_by_user` mutations/queries.&#10;- Introduce `join_house_by_invitation_code` mutation for joining a house using an invite code.&#10;- Improve user and house associations with support for nested user data in `get_house_by_user`." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add token expiration checks and enhance house-related GraphQL features&#10;&#10;- Handle expired JWT tokens in `auth.py` and enhance `decode_access_token` to return `token_expired` status.&#10;- Update GraphQL context in `main.py` to include `token_expired` flag.&#10;- Add checks for token expiration in `create_house` and `get_house_by_user` mutations/queries.&#10;- Introduce `join_house_by_invitation_code` mutation for joining a house using an invite code.&#10;- Improve user and house associations with support for nested user data in `get_house_by_user`." />
+    <MESSAGE value="Add task recurrence, assignments, and completion tracking&#10;&#10;- Introduce `TaskRecurrence`, `TaskLife`, and `TaskCompletion` models with corresponding Alembic migration.&#10;- Update GraphQL types to include new task-related entities and relationships.&#10;- Refactor `Task` model to remove `is_completed` field and add `weight` attribute.&#10;- Remove deprecated `TaskCategory` and `Assignment` models.&#10;- Add `get_house_by_id` query to improve house querying logic.&#10;- Enhance task management features with support for recurring tasks and completion tracking." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add task recurrence, assignments, and completion tracking&#10;&#10;- Introduce `TaskRecurrence`, `TaskLife`, and `TaskCompletion` models with corresponding Alembic migration.&#10;- Update GraphQL types to include new task-related entities and relationships.&#10;- Refactor `Task` model to remove `is_completed` field and add `weight` attribute.&#10;- Remove deprecated `TaskCategory` and `Assignment` models.&#10;- Add `get_house_by_id` query to improve house querying logic.&#10;- Enhance task management features with support for recurring tasks and completion tracking." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1772697814048" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1772702827947" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

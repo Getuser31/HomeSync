@@ -1,9 +1,9 @@
 import strawberry
-from .queries import TaskQueries, UserQueries, HouseQueries
+from .queries import TaskQueries, UserQueries, HouseQueries, TaskRecurrenceQueries
 from .mutations import TaskMutations, UserMutations, HouseMutations
 
 @strawberry.type
-class Query(TaskQueries, UserQueries, HouseQueries):
+class Query(TaskQueries, UserQueries, HouseQueries, TaskRecurrenceQueries):
     pass
 
 @strawberry.type

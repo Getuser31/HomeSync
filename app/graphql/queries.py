@@ -2,10 +2,11 @@ import strawberry
 from typing import List
 
 from app.graphql.types import House, HouseError, UserError
-from .types import Task, User, House, HouseError, UserError
+from .types import Task, User, House, HouseError, UserError, TaskRecurrence
 from ..models import Task as TaskModel
 from ..models import User as UserModel
 from ..models import House as HouseModel
+from ..models import TaskRecurrence as TaskRecurrenceModel
 from strawberry.types import Info
 from sqlalchemy.orm import joinedload
 
@@ -145,3 +146,19 @@ class HouseQueries:
                 for u in house.users
             ]
         )
+
+
+@strawberry.type
+class TaskRecurrenceQueries:
+    @strawberry.field
+    def get_task_recurrences(self, info: Info) -> List[TaskRecurrence]:
+        db = info.context["db"]
+        recurrences = db.query(TaskRecurrenceModel).all()
+        return [
+            TaskRecurrence(
+                id=r.id,
+                name=r.name,
+                frequency_days=r.frequency_days
+            )
+            for r in recurrences
+        ]
