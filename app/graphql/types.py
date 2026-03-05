@@ -9,9 +9,33 @@ class Task:
     id: int
     title: str
     description: Optional[str] = None
-    is_completed: bool = False
+    weight: int
     house: Optional["House"] = None
+    task_lives: List["TaskLife"] = field(default_factory=list)
 
+
+@strawberry.type
+class TaskRecurrence:
+    id: int
+    name: str
+    frequency_days: int
+
+
+@strawberry.type
+class TaskLife:
+    id: int
+    task: Optional[Task] = None
+    recurrence: Optional[TaskRecurrence] = None
+    assigned_users: List["User"]
+
+
+@strawberry.type
+class TaskCompletion:
+    id: int
+    task_life: Optional[TaskLife] = None
+    user_who_completed_id: int
+    completed_at: datetime
+    period_key: str
 
 @strawberry.type
 class User:
@@ -54,16 +78,3 @@ CreateHouseResult = strawberry.union("CreateHouseResult", types=(House, HouseErr
 
 
 
-@strawberry.type
-class TaskCategory:
-    id: int
-    name: str
-
-
-@strawberry.type
-class Assignment:
-    id: int
-    task: Task
-    user: User
-    due_date: datetime
-    is_completed: bool

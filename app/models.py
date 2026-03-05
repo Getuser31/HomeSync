@@ -10,6 +10,13 @@ class HouseUser(Base):
     user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
 
 
+class TaskLifeUser(Base):
+    __tablename__ = "task_life_users"
+
+    task_life_id = Column(Integer, ForeignKey("task_lives.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+
+
 class House(Base):
     __tablename__ = "houses"
 
@@ -21,30 +28,54 @@ class House(Base):
     users = relationship("User", secondary="house_users", back_populates="houses")
 
 
-class TaskCategory(Base):
-    __tablename__ = "task_categories"
-
-    id = Column(Integer, primary_key=True, index=True)
-    name = Column(String, index=True)
-
-    tasks = relationship("Task", back_populates="category")
-
-
 class Task(Base):
     __tablename__ = "tasks"
 
     id = Column(Integer, primary_key=True)
     title = Column(String, index=True)
     description = Column(String, nullable=True)
-    is_completed = Column(Boolean, default=False)
+    weight = Column(Integer)
 
     house_id = Column(Integer, ForeignKey("houses.id"))
     house = relationship("House", back_populates="tasks")
 
-    category_id = Column(Integer, ForeignKey("task_categories.id"))
-    category = relationship("TaskCategory", back_populates="tasks")
+    task_lives = relationship("TaskLife", back_populates="task")
 
-    assignments = relationship("Assignment", back_populates="task")
+
+class TaskRecurrence(Base):
+    __tablename__ = "task_recurrences"
+
+    id = Column(Integer, primary_key=True)
+    name = Column(String)
+    frequency_days = Column(Integer)
+
+    task_lives = relationship("TaskLife", back_populates="recurrence")
+
+
+class TaskLife(Base):
+    __tablename__ = "task_lives"
+
+    id = Column(Integer, primary_key=True)
+    task_id = Column(Integer, ForeignKey("tasks.id"))
+    recurrence_id = Column(Integer, ForeignKey("task_recurrences.id"))
+
+    task = relationship("Task", back_populates="task_lives")
+    recurrence = relationship("TaskRecurrence", back_populates="task_lives")
+    assigned_users = relationship("User", secondary="task_life_users")
+    completions = relationship("TaskCompletion", back_populates="task_life")
+
+
+class TaskCompletion(Base):
+    __tablename__ = "task_completions"
+
+    id = Column(Integer, primary_key=True)
+    task_life_id = Column(Integer, ForeignKey("task_lives.id"))
+    user_who_completed_id = Column(Integer, ForeignKey("users.id"))
+    completed_at = Column(DateTime)
+    period_key = Column(String)
+
+    task_life = relationship("TaskLife", back_populates="completions")
+    user_who_completed = relationship("User")
 
 
 class User(Base):
@@ -57,19 +88,3 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     houses = relationship("House", secondary="house_users", back_populates="users")
-    assignments = relationship("Assignment", back_populates="user")
-
-
-class Assignment(Base):
-    __tablename__ = "assignments"
-
-    id = Column(Integer, primary_key=True, index=True)
-
-    task_id = Column(Integer, ForeignKey("tasks.id"))
-    task = relationship("Task", back_populates="assignments")
-
-    user_id = Column(Integer, ForeignKey("users.id"))
-    user = relationship("User", back_populates="assignments")
-
-    due_date = Column(DateTime, nullable=False)
-    is_completed = Column(Boolean, default=False)

@@ -1,7 +1,8 @@
 import strawberry
 from typing import List
 
-from .types import Task, User, House
+from app.graphql.types import House, HouseError, UserError
+from .types import Task, User, House, HouseError, UserError
 from ..models import Task as TaskModel
 from ..models import User as UserModel
 from ..models import House as HouseModel
@@ -112,3 +113,35 @@ class HouseQueries:
             )
             for h in user.houses
         ]
+
+    @strawberry.field
+    def get_house_by_id(self, info: Info, id: int) -> UserError | HouseError | House:
+        db = info.context['db']
+        house = db.query(HouseModel).filter(HouseModel.id == id).first()
+        userId = info.context['user_id']
+        if not userId:
+            return UserError(message="User not authenticated.")
+
+        user = db.query(UserModel).filter(UserModel.id == userId).first()
+        if not user:
+            return UserError(message="User not found.")
+
+        if not house:
+            return HouseError(message="House not found")
+
+        house = (
+            db.query(HouseModel)
+            .options(joinedload(HouseModel.users))
+            .filter(HouseModel.id == id)
+            .first()
+        )
+
+        return House(
+            id=house.id,
+            name=house.name,
+            invite_code=house.invite_code,
+            users=[
+                User(id=u.id, name=u.name, email=u.email, is_active=u.is_active)
+                for u in house.users
+            ]
+        )
