@@ -26,7 +26,8 @@ class TaskLife:
     id: int
     task: Optional[Task] = None
     recurrence: Optional[TaskRecurrence] = None
-    assigned_users: List["User"]
+    assigned_users: List["User"] = field(default_factory=list)
+    completions: List["TaskCompletion"] = field(default_factory=list)
 
 
 @strawberry.type

@@ -1,7 +1,7 @@
 import strawberry
 from typing import Optional
 
-from app.graphql.types import House, HouseError
+from app.graphql.types import House, HouseError, Task, UserError, User
 from .types import Task, User, UserError, CreateUserResult, AuthPayload, LoginResult, House, \
     HouseError
 from ..models import Task as TaskModel
@@ -46,11 +46,39 @@ class TaskMutations:
 
         return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
 
+    @strawberry.mutation
+    def assign_task_to_user(self, info: Info, task_id: int, user_id: int) -> Task | UserError:
+        db = info.context["db"]
+        task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if task and user:
+            task_life = db.query(TaskLifeModel).filter(TaskLifeModel.task_id == task_id).first()
+            task_life.assigned_users.append(user)
+            db.commit()
+            db.refresh(task_life)
+            return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
+        else:
+            return UserError(message="Task or user not found")
+
+    @strawberry.mutation
+    def remove_user_from_task(self, info: Info, task_id: int, user_id: int) -> Task | UserError:
+        db = info.context["db"]
+        task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if task and user:
+            task_life = db.query(TaskLifeModel).filter(TaskLifeModel.task_id == task.id).first()
+            task_life.assigned_users.remove(user)
+            db.commit()
+            db.refresh(task_life)
+            return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
+        else:
+            return UserError(message="Task or user not found")
+
 
 @strawberry.type
 class UserMutations:
     @strawberry.mutation
-    def create_user(self, info: Info, username: str, email: str, password: str) -> CreateUserResult:
+    def create_user(self, info: Info, username: str, email: str, password: str) -> UserError | User:
         db = info.context["db"]
 
         email = email.lower()
@@ -73,7 +101,7 @@ class UserMutations:
         )
 
     @strawberry.mutation
-    def login(self, info: Info, email: str, password: str) -> LoginResult:
+    def login(self, info: Info, email: str, password: str) -> AuthPayload | UserError:
         db = info.context["db"]
         token = login_user(db, email, password)
         if token is None:

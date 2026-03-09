@@ -2,11 +2,12 @@ import strawberry
 from typing import List
 
 from app.graphql.types import House, HouseError, UserError
-from .types import Task, User, House, HouseError, UserError, TaskRecurrence
+from .types import Task, User, House, HouseError, UserError, TaskRecurrence, TaskLife, TaskCompletion
 from ..models import Task as TaskModel
 from ..models import User as UserModel
 from ..models import House as HouseModel
 from ..models import TaskRecurrence as TaskRecurrenceModel
+from ..models import TaskLife as TaskLifeModel
 from strawberry.types import Info
 from sqlalchemy.orm import joinedload
 
@@ -41,12 +42,40 @@ class TaskQueries:
                 id=t.id,
                 title=t.title,
                 description=t.description,
-                is_completed=t.is_completed,
+                weight=t.weight,
                 house=House(
                     id=t.house.id,
                     name=t.house.name,
                     invite_code=t.house.invite_code
-                ) if t.house else None
+                ) if t.house else None,
+                task_lives=[
+                    TaskLife(
+                        id=tl.id,
+                        recurrence=TaskRecurrence(
+                            id=tl.recurrence.id,
+                            name=tl.recurrence.name,
+                            frequency_days=tl.recurrence.frequency_days
+                        ) if tl.recurrence else None,
+                        completions=[
+                            TaskCompletion(
+                                id=tc.id,
+                                completed_at=tc.completed_at,
+                                period_key=tc.period_key,
+                                user_who_completed_id=tc.user_who_completed_id
+                            )
+                            for tc in tl.completions
+                        ],
+                        assigned_users=[
+                            User(
+                                id=au.id,
+                                name=au.name,
+                                email=au.email,
+                            )
+                            for au in tl.assigned_users
+                        ]
+                    )
+                    for tl in t.task_lives
+                ]
             )
         return None
 
@@ -133,6 +162,12 @@ class HouseQueries:
         house = (
             db.query(HouseModel)
             .options(joinedload(HouseModel.users))
+            .options(joinedload(HouseModel.tasks)
+                     .joinedload(TaskModel.task_lives)
+                     .joinedload(TaskLifeModel.recurrence))
+            .options(joinedload(HouseModel.tasks)
+                     .joinedload(TaskModel.task_lives)
+                     .joinedload(TaskLifeModel.completions))
             .filter(HouseModel.id == id)
             .first()
         )
@@ -144,6 +179,37 @@ class HouseQueries:
             users=[
                 User(id=u.id, name=u.name, email=u.email, is_active=u.is_active)
                 for u in house.users
+            ],
+            tasks=[
+                Task(
+                    id=t.id,
+                    title=t.title,
+                    description=t.description,
+                    weight=t.weight,
+                    task_lives=[
+                        TaskLife(
+                            id=tl.id,
+                            recurrence=TaskRecurrence(
+                                id=tl.recurrence.id,
+                                name=tl.recurrence.name,
+                                frequency_days=tl.recurrence.frequency_days,
+                            ) if tl.recurrence else None,
+                            completions=[
+                                TaskCompletion(
+                                    id=tc.id,
+                                    user_who_completed_id=tc.user_who_completed_id,
+                                    completed_at=tc.completed_at,
+                                    period_key=tc.period_key,
+                                ) for tc in tl.completions
+                            ],
+                            assigned_users=[
+                                User(id=u.id, name=u.name, email=u.email,
+                                     is_active=u.is_active)
+                                for u in tl.assigned_users
+                            ],
+                        ) for tl in t.task_lives
+                    ],
+                ) for t in house.tasks
             ]
         )
 
