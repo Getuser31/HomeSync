@@ -1,7 +1,7 @@
 import strawberry
 from typing import List
 
-from app.graphql.types import House, HouseError, UserError
+from app.graphql.types import House, HouseError, UserError, User
 from .types import Task, User, House, HouseError, UserError, TaskRecurrence, TaskLife, TaskCompletion
 from ..models import Task as TaskModel
 from ..models import User as UserModel
@@ -82,6 +82,21 @@ class TaskQueries:
 
 @strawberry.type
 class UserQueries:
+    @strawberry.field
+    def get_me(self, info: Info) -> UserError | User:
+        db = info.context["db"]
+        if info.context.get("token_expired"):
+            raise ValueError("TOKEN_EXPIRED")
+        userId = info.context['user_id']
+        user = db.query(UserModel).filter(UserModel.id == userId).first()
+        if not user:
+            return UserError(message="User not found")
+        return User(
+            id=user.id,
+            name=user.name,
+            email=user.email,
+        )
+
     @strawberry.field
     def get_all_users(self, info: Info) -> List[User]:
         db = info.context["db"]

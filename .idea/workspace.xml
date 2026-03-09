@@ -4,7 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Update GraphQL schema, queries, and mutations for task recurrence and assignments&#10;&#10;- Add `TaskRecurrenceQueries` to GraphQL schema for fetching task recurrence data.&#10;- Update `create_task` mutation to include recurrence, house, and assignment details.&#10;- Refactor GraphQL types and models for enhanced task relationship management.&#10;- Remove deprecated `TaskCategory` mutation and associated logic.">
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message.">
+      <change afterPath="$PROJECT_DIR$/app/services/period_key_service.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
@@ -159,7 +160,7 @@
       <workItem from="1772697811728" duration="12768000" />
       <workItem from="1772787592641" duration="7033000" />
       <workItem from="1773044770718" duration="20000" />
-      <workItem from="1773044804182" duration="3256000" />
+      <workItem from="1773044804182" duration="12397000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -273,7 +274,23 @@
       <option name="project" value="LOCAL" />
       <updated>1772724170207</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="Enhance task GraphQL API with assignments and completions&#10;&#10;- Update `Task` and `TaskLife` types in `app/graphql/types.py` to include `completions` and `assigned_users`.&#10;- Modify `get_tasks` and `get_house_by_id` in `app/graphql/queries.py` to populate nested task life data (recurrence, completions, assignments).&#10;- Replace `is_completed` field with `weight` in `Task` query mapping.&#10;- Add `assign_task_to_user` and `remove_user_from_task` mutations in `app/graphql/mutations.py`.&#10;- Refactor return types for `create_user` and `login` mutations to use explicit unions.">
+      <option name="closed" value="true" />
+      <created>1773049156399</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1773049156399</updated>
+    </task>
+    <task id="LOCAL-00016" summary="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message.">
+      <option name="closed" value="true" />
+      <created>1773052847713</created>
+      <option name="number" value="00016" />
+      <option name="presentableId" value="LOCAL-00016" />
+      <option name="project" value="LOCAL" />
+      <updated>1773052847713</updated>
+    </task>
+    <option name="localTasksCounter" value="17" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -305,7 +322,9 @@
     <MESSAGE value="Add token expiration checks and enhance house-related GraphQL features&#10;&#10;- Handle expired JWT tokens in `auth.py` and enhance `decode_access_token` to return `token_expired` status.&#10;- Update GraphQL context in `main.py` to include `token_expired` flag.&#10;- Add checks for token expiration in `create_house` and `get_house_by_user` mutations/queries.&#10;- Introduce `join_house_by_invitation_code` mutation for joining a house using an invite code.&#10;- Improve user and house associations with support for nested user data in `get_house_by_user`." />
     <MESSAGE value="Add task recurrence, assignments, and completion tracking&#10;&#10;- Introduce `TaskRecurrence`, `TaskLife`, and `TaskCompletion` models with corresponding Alembic migration.&#10;- Update GraphQL types to include new task-related entities and relationships.&#10;- Refactor `Task` model to remove `is_completed` field and add `weight` attribute.&#10;- Remove deprecated `TaskCategory` and `Assignment` models.&#10;- Add `get_house_by_id` query to improve house querying logic.&#10;- Enhance task management features with support for recurring tasks and completion tracking." />
     <MESSAGE value="Update GraphQL schema, queries, and mutations for task recurrence and assignments&#10;&#10;- Add `TaskRecurrenceQueries` to GraphQL schema for fetching task recurrence data.&#10;- Update `create_task` mutation to include recurrence, house, and assignment details.&#10;- Refactor GraphQL types and models for enhanced task relationship management.&#10;- Remove deprecated `TaskCategory` mutation and associated logic." />
-    <option name="LAST_COMMIT_MESSAGE" value="Update GraphQL schema, queries, and mutations for task recurrence and assignments&#10;&#10;- Add `TaskRecurrenceQueries` to GraphQL schema for fetching task recurrence data.&#10;- Update `create_task` mutation to include recurrence, house, and assignment details.&#10;- Refactor GraphQL types and models for enhanced task relationship management.&#10;- Remove deprecated `TaskCategory` mutation and associated logic." />
+    <MESSAGE value="Enhance task GraphQL API with assignments and completions&#10;&#10;- Update `Task` and `TaskLife` types in `app/graphql/types.py` to include `completions` and `assigned_users`.&#10;- Modify `get_tasks` and `get_house_by_id` in `app/graphql/queries.py` to populate nested task life data (recurrence, completions, assignments).&#10;- Replace `is_completed` field with `weight` in `Task` query mapping.&#10;- Add `assign_task_to_user` and `remove_user_from_task` mutations in `app/graphql/mutations.py`.&#10;- Refactor return types for `create_user` and `login` mutations to use explicit unions." />
+    <MESSAGE value="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

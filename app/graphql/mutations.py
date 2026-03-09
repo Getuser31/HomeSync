@@ -1,16 +1,20 @@
+from datetime import datetime
+
 import strawberry
 from typing import Optional
 
-from .types import Task, User, UserError, CreateUserResult, AuthPayload, LoginResult, House, \
+from .types import Task, TaskCompletion, User, UserError, CreateUserResult, AuthPayload, LoginResult, House, \
     HouseError, TaskError, DeleteTaskSuccess
 from ..models import Task as TaskModel
 from ..models import TaskLife as TaskLifeModel
+from ..models import TaskCompletion as TaskCompletionModel
 from ..models import House as HouseModel
 from ..models import User as UserModel
 from ..services.house_service import generate_unique_invite_code
 from ..services.user_login import login_user
 from strawberry.types import Info
 from passlib.context import CryptContext
+from ..services.period_key_service import generate_period_key
 
 
 @strawberry.type
@@ -87,6 +91,38 @@ class TaskMutations:
             return TaskError(message="Task not found")
         else:
             return UserError(message="User not found")
+
+    @strawberry.mutation
+    def complete_task(self, info: Info, task_id: int) -> TaskCompletion | TaskError | UserError:
+        db = info.context["db"]
+        user_id = info.context.get("user_id")
+        if not user_id:
+            return UserError(message="User not authenticated.")
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return UserError(message="User not found.")
+        task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
+        if not task:
+            return TaskError(message="Task not found.")
+        task_life = db.query(TaskLifeModel).filter(TaskLifeModel.task_id == task_id).first()
+        period = generate_period_key(task_life.recurrence.name)
+        task_completion = TaskCompletionModel(
+            completed_at=datetime.now(),
+            period_key=period,
+            user_who_completed_id=user_id,
+            task_life_id=task_life.id
+        )
+        db.add(task_completion)
+        db.commit()
+        db.refresh(task_completion)
+        return TaskCompletion(
+            id=task_completion.id,
+            user_who_completed_id=task_completion.user_who_completed_id,
+            completed_at=task_completion.completed_at,
+            period_key=task_completion.period_key
+        )
+
+
 
 
 

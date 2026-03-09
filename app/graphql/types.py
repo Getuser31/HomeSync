@@ -36,6 +36,7 @@ class TaskCompletion:
     task_life: Optional[TaskLife] = None
     user_who_completed_id: int
     completed_at: datetime
+    # period_key permet de dire : "C'est la complétion pour la semaine 12 de 2024"
     period_key: str
 
 @strawberry.type
