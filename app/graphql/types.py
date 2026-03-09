@@ -71,6 +71,21 @@ LoginResult = strawberry.union("LoginResult", types=(AuthPayload, UserError))
 
 
 @strawberry.type
+class TaskError:
+    message: str
+
+
+CreateTaskResult = strawberry.union("CreateTaskResult", types=(Task, TaskError))
+
+@strawberry.type
+class DeleteTaskSuccess:
+    success: bool = True
+
+
+DeleteTaskResult = strawberry.union("DeleteTaskResult", types=(DeleteTaskSuccess, TaskError))
+
+
+@strawberry.type
 class HouseError:
     message: str
 

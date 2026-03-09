@@ -1,9 +1,8 @@
 import strawberry
 from typing import Optional
 
-from app.graphql.types import House, HouseError, Task, UserError, User
 from .types import Task, User, UserError, CreateUserResult, AuthPayload, LoginResult, House, \
-    HouseError
+    HouseError, TaskError, DeleteTaskSuccess
 from ..models import Task as TaskModel
 from ..models import TaskLife as TaskLifeModel
 from ..models import House as HouseModel
@@ -47,7 +46,18 @@ class TaskMutations:
         return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
 
     @strawberry.mutation
-    def assign_task_to_user(self, info: Info, task_id: int, user_id: int) -> Task | UserError:
+    def delete_task(self, info: Info, task_id: int) -> DeleteTaskSuccess | TaskError:
+        db = info.context["db"]
+        task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
+        if task:
+            db.delete(task)
+            db.commit()
+            return DeleteTaskSuccess()
+        else:
+            return TaskError(message="Task not found")
+
+    @strawberry.mutation
+    def assign_task_to_user(self, info: Info, task_id: int, user_id: int) -> Task | TaskError | UserError:
         db = info.context["db"]
         task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
         user = db.query(UserModel).filter(UserModel.id == user_id).first()
@@ -57,11 +67,13 @@ class TaskMutations:
             db.commit()
             db.refresh(task_life)
             return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
+        elif not task:
+            return TaskError(message="Task not found")
         else:
-            return UserError(message="Task or user not found")
+            return UserError(message="User not found")
 
     @strawberry.mutation
-    def remove_user_from_task(self, info: Info, task_id: int, user_id: int) -> Task | UserError:
+    def remove_user_from_task(self, info: Info, task_id: int, user_id: int) -> Task | TaskError | UserError:
         db = info.context["db"]
         task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
         user = db.query(UserModel).filter(UserModel.id == user_id).first()
@@ -71,8 +83,12 @@ class TaskMutations:
             db.commit()
             db.refresh(task_life)
             return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
+        elif not task:
+            return TaskError(message="Task not found")
         else:
-            return UserError(message="Task or user not found")
+            return UserError(message="User not found")
+
+
 
 
 @strawberry.type
