@@ -23,7 +23,6 @@ class TaskQueries:
                 id=t.id,
                 title=t.title,
                 description=t.description,
-                is_completed=t.is_completed,
                 house=House(
                     id=t.house.id,
                     name=t.house.name,

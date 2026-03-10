@@ -4,8 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message.">
-      <change afterPath="$PROJECT_DIR$/app/services/period_key_service.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
@@ -17,7 +16,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="48" />
+    <option name="cachedIndexableFilesCount" value="49" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -160,7 +159,8 @@
       <workItem from="1772697811728" duration="12768000" />
       <workItem from="1772787592641" duration="7033000" />
       <workItem from="1773044770718" duration="20000" />
-      <workItem from="1773044804182" duration="12397000" />
+      <workItem from="1773044804182" duration="12678000" />
+      <workItem from="1773130931052" duration="3031000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -290,7 +290,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773052847713</updated>
     </task>
-    <option name="localTasksCounter" value="17" />
+    <task id="LOCAL-00017" summary="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`.">
+      <option name="closed" value="true" />
+      <created>1773070200430</created>
+      <option name="number" value="00017" />
+      <option name="presentableId" value="LOCAL-00017" />
+      <option name="project" value="LOCAL" />
+      <updated>1773070200430</updated>
+    </task>
+    <option name="localTasksCounter" value="18" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -324,11 +332,12 @@
     <MESSAGE value="Update GraphQL schema, queries, and mutations for task recurrence and assignments&#10;&#10;- Add `TaskRecurrenceQueries` to GraphQL schema for fetching task recurrence data.&#10;- Update `create_task` mutation to include recurrence, house, and assignment details.&#10;- Refactor GraphQL types and models for enhanced task relationship management.&#10;- Remove deprecated `TaskCategory` mutation and associated logic." />
     <MESSAGE value="Enhance task GraphQL API with assignments and completions&#10;&#10;- Update `Task` and `TaskLife` types in `app/graphql/types.py` to include `completions` and `assigned_users`.&#10;- Modify `get_tasks` and `get_house_by_id` in `app/graphql/queries.py` to populate nested task life data (recurrence, completions, assignments).&#10;- Replace `is_completed` field with `weight` in `Task` query mapping.&#10;- Add `assign_task_to_user` and `remove_user_from_task` mutations in `app/graphql/mutations.py`.&#10;- Refactor return types for `create_user` and `login` mutations to use explicit unions." />
     <MESSAGE value="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message." />
+    <MESSAGE value="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1773045036264" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1773131022732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

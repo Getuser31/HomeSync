@@ -4,7 +4,7 @@ import strawberry
 from typing import Optional
 
 from .types import Task, TaskCompletion, User, UserError, CreateUserResult, AuthPayload, LoginResult, House, \
-    HouseError, TaskError, DeleteTaskSuccess
+    HouseError, TaskError, DeleteTaskSuccess, UncompletedTaskSuccess
 from ..models import Task as TaskModel
 from ..models import TaskLife as TaskLifeModel
 from ..models import TaskCompletion as TaskCompletionModel
@@ -104,8 +104,10 @@ class TaskMutations:
         task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
         if not task:
             return TaskError(message="Task not found.")
+
         task_life = db.query(TaskLifeModel).filter(TaskLifeModel.task_id == task_id).first()
         period = generate_period_key(task_life.recurrence.name)
+
         task_completion = TaskCompletionModel(
             completed_at=datetime.now(),
             period_key=period,
@@ -122,6 +124,28 @@ class TaskMutations:
             period_key=task_completion.period_key
         )
 
+    @strawberry.mutation
+    def uncompleted_task(self, info: Info, task_id: int) -> UncompletedTaskSuccess | TaskError | UserError:
+        db = info.context["db"]
+        user_id = info.context.get("user_id")
+        if not user_id:
+            return UserError(message="User not authenticated.")
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return UserError(message="User not found.")
+        task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
+        if not task:
+            return TaskError(message="Task not found.")
+
+        task_life = db.query(TaskLifeModel).filter(TaskLifeModel.task_id == task_id).first()
+        period = generate_period_key(task_life.recurrence.name)
+
+        task_completion = db.query(TaskCompletionModel).filter(TaskCompletionModel.task_life_id == task_life.id).first()
+        if not task_completion:
+            return TaskError(message="Task not found.")
+        db.delete(task_completion)
+        db.commit()
+        return UncompletedTaskSuccess()
 
 
 

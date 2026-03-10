@@ -1,7 +1,12 @@
 import strawberry
-from typing import Optional, List
+from typing import Optional, List, TYPE_CHECKING
 from datetime import datetime
 from dataclasses import field
+
+if TYPE_CHECKING:
+    from app.services.period_key_service import generate_period_key
+else:
+    from app.services.period_key_service import generate_period_key
 
 
 @strawberry.type
@@ -12,6 +17,13 @@ class Task:
     weight: int
     house: Optional["House"] = None
     task_lives: List["TaskLife"] = field(default_factory=list)
+
+    @strawberry.field
+    def is_completed(self) -> bool:
+        if not self.task_lives:
+            return False
+
+        return all(task_life.is_completed() for task_life in self.task_lives)
 
 
 @strawberry.type
@@ -28,6 +40,14 @@ class TaskLife:
     recurrence: Optional[TaskRecurrence] = None
     assigned_users: List["User"] = field(default_factory=list)
     completions: List["TaskCompletion"] = field(default_factory=list)
+
+    @strawberry.field
+    def is_completed(self) -> bool:
+        if not self.recurrence:
+            return False
+
+        current_period_key = generate_period_key(self.recurrence.name)
+        return any(completion.period_key == current_period_key for completion in self.completions)
 
 
 @strawberry.type
@@ -84,6 +104,15 @@ class DeleteTaskSuccess:
 
 
 DeleteTaskResult = strawberry.union("DeleteTaskResult", types=(DeleteTaskSuccess, TaskError))
+
+
+@strawberry.type
+class UncompletedTaskSuccess:
+    success: bool = True
+
+
+UncompletedTaskResult = strawberry.union("UncompletedTaskResult", types=(UncompletedTaskSuccess, TaskError))
+
 
 
 @strawberry.type
