@@ -4,11 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`.">
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Implement dynamic task completion checks and uncomplete mutation&#10;&#10;- Add `is_completed` field resolvers to `Task` and `TaskLife` GraphQL types in `app/graphql/types.py` to determine status based on recurrence period.&#10;- Implement `uncompleted_task` mutation in `app/graphql/mutations.py` to remove existing task completions.&#10;- Define `UncompletedTaskSuccess` and `UncompletedTaskResult` types.&#10;- Remove static `is_completed` field assignment in `get_tasks` query in `app/graphql/queries.py`.">
+      <change afterPath="$PROJECT_DIR$/alembic/versions/e13ff1300265_add_role_house_users_table.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -160,7 +161,8 @@
       <workItem from="1772787592641" duration="7033000" />
       <workItem from="1773044770718" duration="20000" />
       <workItem from="1773044804182" duration="12678000" />
-      <workItem from="1773130931052" duration="3031000" />
+      <workItem from="1773130931052" duration="4504000" />
+      <workItem from="1773736778003" duration="9424000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -298,7 +300,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773070200430</updated>
     </task>
-    <option name="localTasksCounter" value="18" />
+    <task id="LOCAL-00018" summary="Implement dynamic task completion checks and uncomplete mutation&#10;&#10;- Add `is_completed` field resolvers to `Task` and `TaskLife` GraphQL types in `app/graphql/types.py` to determine status based on recurrence period.&#10;- Implement `uncompleted_task` mutation in `app/graphql/mutations.py` to remove existing task completions.&#10;- Define `UncompletedTaskSuccess` and `UncompletedTaskResult` types.&#10;- Remove static `is_completed` field assignment in `get_tasks` query in `app/graphql/queries.py`.">
+      <option name="closed" value="true" />
+      <created>1773134739550</created>
+      <option name="number" value="00018" />
+      <option name="presentableId" value="LOCAL-00018" />
+      <option name="project" value="LOCAL" />
+      <updated>1773134739550</updated>
+    </task>
+    <option name="localTasksCounter" value="19" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -333,7 +343,8 @@
     <MESSAGE value="Enhance task GraphQL API with assignments and completions&#10;&#10;- Update `Task` and `TaskLife` types in `app/graphql/types.py` to include `completions` and `assigned_users`.&#10;- Modify `get_tasks` and `get_house_by_id` in `app/graphql/queries.py` to populate nested task life data (recurrence, completions, assignments).&#10;- Replace `is_completed` field with `weight` in `Task` query mapping.&#10;- Add `assign_task_to_user` and `remove_user_from_task` mutations in `app/graphql/mutations.py`.&#10;- Refactor return types for `create_user` and `login` mutations to use explicit unions." />
     <MESSAGE value="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message." />
     <MESSAGE value="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`." />
-    <option name="LAST_COMMIT_MESSAGE" value="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`." />
+    <MESSAGE value="Implement dynamic task completion checks and uncomplete mutation&#10;&#10;- Add `is_completed` field resolvers to `Task` and `TaskLife` GraphQL types in `app/graphql/types.py` to determine status based on recurrence period.&#10;- Implement `uncompleted_task` mutation in `app/graphql/mutations.py` to remove existing task completions.&#10;- Define `UncompletedTaskSuccess` and `UncompletedTaskResult` types.&#10;- Remove static `is_completed` field assignment in `get_tasks` query in `app/graphql/queries.py`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Implement dynamic task completion checks and uncomplete mutation&#10;&#10;- Add `is_completed` field resolvers to `Task` and `TaskLife` GraphQL types in `app/graphql/types.py` to determine status based on recurrence period.&#10;- Implement `uncompleted_task` mutation in `app/graphql/mutations.py` to remove existing task completions.&#10;- Define `UncompletedTaskSuccess` and `UncompletedTaskResult` types.&#10;- Remove static `is_completed` field assignment in `get_tasks` query in `app/graphql/queries.py`." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

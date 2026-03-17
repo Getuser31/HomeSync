@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, UniqueConstraint
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -78,6 +78,27 @@ class TaskCompletion(Base):
     user_who_completed = relationship("User")
 
 
+class Role(Base):
+    __tablename__ = "roles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String)
+
+
+class RoleHouseUser(Base):
+    __tablename__ = "role_house_users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    house_id = Column(Integer, ForeignKey("houses.id"), nullable=False)
+
+    __table_args__ = (UniqueConstraint("user_id", "house_id", name="uq_role_house_user"),)
+
+    role = relationship("Role")
+    house = relationship("House")
+
+
 class User(Base):
     __tablename__ = "users"
 
@@ -88,3 +109,4 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     houses = relationship("House", secondary="house_users", back_populates="users")
+    role_house_users = relationship("RoleHouseUser", foreign_keys="RoleHouseUser.user_id")

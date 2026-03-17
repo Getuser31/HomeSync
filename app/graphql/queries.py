@@ -2,8 +2,9 @@ import strawberry
 from typing import List
 
 from app.graphql.types import House, HouseError, UserError, User
-from .types import Task, User, House, HouseError, UserError, TaskRecurrence, TaskLife, TaskCompletion
-from ..models import Task as TaskModel
+from .types import Task, User, House, HouseError, UserError, TaskRecurrence, TaskLife, TaskCompletion, RoleHouseUser, \
+    Role
+from ..models import Task as TaskModel, Role, RoleHouseUser as RoleHouseUserModel
 from ..models import User as UserModel
 from ..models import House as HouseModel
 from ..models import TaskRecurrence as TaskRecurrenceModel
@@ -94,6 +95,14 @@ class UserQueries:
             id=user.id,
             name=user.name,
             email=user.email,
+            role_house_users=[
+                RoleHouseUser(
+                    id=rhu.id,
+                    role=Role(id=rhu.role.id, name=rhu.role.name),
+                    house=House(id=rhu.house.id, name=rhu.house.name, invite_code=rhu.house.invite_code),
+                )
+                for rhu in user.role_house_users
+            ]
         )
 
     @strawberry.field
@@ -140,11 +149,16 @@ class HouseQueries:
         user = (
             db.query(UserModel)
             .options(joinedload(UserModel.houses).joinedload(HouseModel.users))
+            .options(joinedload(UserModel.role_house_users).joinedload(RoleHouseUserModel.role))
             .filter(UserModel.id == user_id)
             .first()
         )
         if not user:
             return None
+
+        # Build a lookup: house_id -> RoleHouseUser for the current user
+        role_by_house = {rhu.house_id: rhu for rhu in user.role_house_users}
+
         return [
             House(
                 id=h.id,
@@ -154,6 +168,8 @@ class HouseQueries:
                     User(id=u.id, name=u.name, email=u.email, is_active=u.is_active)
                     for u in h.users
                 ],
+                current_user_role=Role(id=rhu.role.id, name=rhu.role.name)
+                if (rhu := role_by_house.get(h.id)) else None,
             )
             for h in user.houses
         ]

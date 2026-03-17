@@ -59,6 +59,20 @@ class TaskCompletion:
     # period_key permet de dire : "C'est la complétion pour la semaine 12 de 2024"
     period_key: str
 
+
+@strawberry.type
+class Role:
+    id: int
+    name: str
+
+
+@strawberry.type
+class RoleHouseUser:
+    id: int
+    role: Optional[Role] = None
+    house: Optional["House"] = None
+
+
 @strawberry.type
 class User:
     id: int
@@ -66,7 +80,7 @@ class User:
     name: str
     is_active: bool = True
     houses: List["House"] = field(default_factory=list)
-
+    role_house_users: List[RoleHouseUser] = field(default_factory=list)
 
 @strawberry.type
 class House:
@@ -75,6 +89,7 @@ class House:
     invite_code: str
     users: List[User] = field(default_factory=list)
     tasks: List[Task] = field(default_factory=list)
+    current_user_role: Optional[Role] = None
 
 
 @strawberry.type
