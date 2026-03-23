@@ -6,7 +6,7 @@ import string
 import strawberry
 from typing import Optional
 
-from app.graphql.types import HouseError, User, UserError
+from app.graphql.types import HouseError, User, UserError, House
 from .types import Task, TaskCompletion, User, UserError, AuthPayload, House, \
     HouseError, TaskError, DeleteTaskSuccess, UncompletedTaskSuccess, RoleHouseUser, Role
 from ..models import Task as TaskModel
@@ -244,7 +244,7 @@ class UserMutations:
         if not house:
             return HouseError(message="House not found.")
 
-        email = f"{username}@{house.name}.com"
+        email = f"{username}@{house.name}.com".lower()
         if db.query(UserModel).filter(UserModel.email == email).first():
             return UserError(message="User with this email already exists.")
 
@@ -332,6 +332,31 @@ class HouseMutations:
             db.refresh(house)
         else:
             raise ValueError("House or user not found")
+
+        return House(
+            id=house.id,
+            name=house.name,
+            invite_code=house.invite_code
+        )
+
+    @strawberry.mutation
+    def remove_user_from_house(self, info: Info, user_id: int, house_id: int) -> HouseError | UserError | House:
+        db = info.context["db"]
+        house = db.query(HouseModel).filter(HouseModel.id == house_id).first()
+        if not house:
+            return HouseError(message="House not found")
+
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return UserError(message="User not found")
+
+        house.users.remove(user)
+        db.commit()
+        db.refresh(house)
+
+        if not user.is_active:
+            db.delete(user)
+            db.commit()
 
         return House(
             id=house.id,
