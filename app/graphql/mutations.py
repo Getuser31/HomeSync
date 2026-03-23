@@ -3,12 +3,14 @@ from datetime import datetime
 import strawberry
 from typing import Optional
 
-from .types import Task, TaskCompletion, User, UserError, CreateUserResult, AuthPayload, LoginResult, House, \
-    HouseError, TaskError, DeleteTaskSuccess, UncompletedTaskSuccess
+from .types import Task, TaskCompletion, User, UserError, AuthPayload, House, \
+    HouseError, TaskError, DeleteTaskSuccess, UncompletedTaskSuccess, RoleHouseUser, Role
 from ..models import Task as TaskModel
 from ..models import TaskLife as TaskLifeModel
 from ..models import TaskCompletion as TaskCompletionModel
 from ..models import House as HouseModel
+from ..models import Role as RoleModel
+from ..models import RoleHouseUser as RoleHouseUserModel
 from ..models import User as UserModel
 from ..services.house_service import generate_unique_invite_code
 from ..services.user_login import login_user
@@ -183,6 +185,57 @@ class UserMutations:
         if token is None:
             return UserError(message="Invalid email or password.")
         return AuthPayload(token=token)
+
+    @strawberry.mutation
+    def update_user_role(self, info: Info, house_id: int, role_id: int, user_id: int) -> UserError | HouseError | User:
+        db = info.context["db"]
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return UserError(message="User not found.")
+        house = db.query(HouseModel).filter(HouseModel.id == house_id).first()
+        if not house:
+            return HouseError(message="House not found.")
+        role = db.query(RoleModel).filter(RoleModel.id == role_id).first()
+
+        currentRole = db.query(RoleHouseUserModel).filter(RoleHouseUserModel.user_id == user_id,
+                                                          RoleHouseUserModel.house_id == house_id).first()
+        if not role:
+            return UserError(message="Role not found.")
+
+        if currentRole and currentRole.role_id == 1:  ## We have to check if the current user is not the last admin in the House
+            admins = db.query(RoleHouseUserModel).filter(RoleHouseUserModel.house_id == house_id,
+                                                         RoleHouseUserModel.role_id == 1).all()
+            if len(admins) == 1:
+                return UserError(message="Cannot remove last admin from house.")
+
+        if currentRole:
+            currentRole.role_id = role_id
+            db.commit()
+            db.refresh(currentRole)
+        else:
+            newRole = RoleHouseUserModel(user_id=user_id, house_id=house_id, role_id=role_id)
+            db.add(newRole)
+            db.commit()
+            db.refresh(newRole)
+
+        finaleUserRole = db.query(RoleHouseUserModel).filter(RoleHouseUserModel.user_id == user_id,
+                                                             RoleHouseUserModel.house_id == house_id).first()
+
+        return User(
+            id=user.id,
+            email=user.email,
+            name=user.name,
+            role_house_users=[
+                RoleHouseUser(
+                    id=finaleUserRole.id,
+                    role=Role(id=role.id, name=role.name)
+                )
+            ]
+        )
+
+
+
+
 
 
 @strawberry.type

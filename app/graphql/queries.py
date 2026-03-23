@@ -1,11 +1,13 @@
+from os import name
+
 import strawberry
 from typing import List
 
-from app.graphql.types import House, HouseError, UserError, User
 from .types import Task, User, House, HouseError, UserError, TaskRecurrence, TaskLife, TaskCompletion, RoleHouseUser, \
     Role
-from ..models import Task as TaskModel, Role, RoleHouseUser as RoleHouseUserModel
+from ..models import Task as TaskModel, RoleHouseUser as RoleHouseUserModel
 from ..models import User as UserModel
+from ..models import Role as RoleUserModel
 from ..models import House as HouseModel
 from ..models import TaskRecurrence as TaskRecurrenceModel
 from ..models import TaskLife as TaskLifeModel
@@ -191,7 +193,8 @@ class HouseQueries:
 
         house = (
             db.query(HouseModel)
-            .options(joinedload(HouseModel.users))
+            .options(
+                joinedload(HouseModel.users).joinedload(UserModel.role_house_users).joinedload(RoleHouseUserModel.role))
             .options(joinedload(HouseModel.tasks)
                      .joinedload(TaskModel.task_lives)
                      .joinedload(TaskLifeModel.recurrence))
@@ -207,7 +210,16 @@ class HouseQueries:
             name=house.name,
             invite_code=house.invite_code,
             users=[
-                User(id=u.id, name=u.name, email=u.email, is_active=u.is_active)
+                User(id=u.id,
+                     name=u.name,
+                     email=u.email,
+                     is_active=u.is_active,
+                     role_house_users=[
+                         RoleHouseUser(id=rhu.id,
+                                       role=Role(id=rhu.role.id, name=rhu.role.name),
+                                       )
+                         for rhu in u.role_house_users if rhu.house_id == house.id]
+                     )
                 for u in house.users
             ],
             tasks=[
@@ -233,7 +245,9 @@ class HouseQueries:
                                 ) for tc in tl.completions
                             ],
                             assigned_users=[
-                                User(id=u.id, name=u.name, email=u.email,
+                                User(id=u.id,
+                                     name=u.name,
+                                     email=u.email,
                                      is_active=u.is_active)
                                 for u in tl.assigned_users
                             ],
@@ -257,4 +271,19 @@ class TaskRecurrenceQueries:
                 frequency_days=r.frequency_days
             )
             for r in recurrences
+        ]
+
+
+@strawberry.type
+class RoleQueries:
+    @strawberry.field
+    def get_roles(self, info: Info) -> List[Role]:
+        db = info.context["db"]
+        roles = db.query(RoleUserModel).all()
+        return [
+            Role(
+                id=r.id,
+                name=r.name
+            )
+            for r in roles
         ]
