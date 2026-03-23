@@ -79,21 +79,53 @@ The application provides a GraphQL interface at:
 - **GraphQL Playground:** `http://127.0.0.1:8000/graphql`
 - **Root Endpoint:** `http://127.0.0.1:8000/` (returns a "Hello World" message)
 
-### Example Queries
+### Queries
 
-You can browse the schema and test queries in the GraphQL Playground.
+| Query | Description |
+|---|---|
+| `getTasks` | Get all tasks |
+| `getTaskById(id)` | Get a task by ID |
+| `getMe` | Get the authenticated user |
+| `getAllUsers` | Get all users |
+| `getHouseByInviteCode(inviteCode)` | Find a house by invite code |
+| `getHouseByUser` | Get houses for the authenticated user |
+| `getHouseById(id)` | Get a house by ID |
+| `getTaskRecurrences` | Get all task recurrence types |
+| `getRoles` | Get all available roles |
 
-**Get all tasks:**
+### Mutations
 
-```graphql
-query {
-    getTasks {
-        id
-        title
-        description
-        isCompleted
-    }
-}
+#### Users
+| Mutation | Description |
+|---|---|
+| `createUser(username, email, password)` | Register a new user |
+| `login(email, password)` | Authenticate and receive a JWT token |
+| `updateUserRole(userId, houseId, roleId)` | Update a user's role in a house |
+
+#### Tasks
+| Mutation | Description |
+|---|---|
+| `createTask(...)` | Create a new task |
+| `deleteTask(taskId)` | Delete a task |
+| `completeTask(taskId, userId?)` | Mark a task as completed (`userId` optional, falls back to authenticated user) |
+| `uncompletedTask(taskId, userId?)` | Mark a task as uncompleted (`userId` optional, falls back to authenticated user) |
+
+#### Houses
+| Mutation | Description |
+|---|---|
+| `createHouse(name)` | Create a new house |
+| `removeUserFromHouse(userId, houseId)` | Remove a user from a house |
+
+### Roles
+
+Users can be assigned roles within a house (e.g. `admin`, `member`). The last admin of a house cannot be removed or demoted.
+
+### Authentication
+
+Most queries and mutations require a Bearer token in the `Authorization` header, obtained via the `login` mutation:
+
+```
+Authorization: Bearer <token>
 ```
 
 ## 📂 Project Structure

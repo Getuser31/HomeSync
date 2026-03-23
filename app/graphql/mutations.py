@@ -99,9 +99,10 @@ class TaskMutations:
             return UserError(message="User not found")
 
     @strawberry.mutation
-    def complete_task(self, info: Info, task_id: int) -> TaskCompletion | TaskError | UserError:
+    def complete_task(self, info: Info, task_id: int,
+                      user_id: Optional[int] = None) -> TaskCompletion | TaskError | UserError:
         db = info.context["db"]
-        user_id = info.context.get("user_id")
+        user_id = user_id or info.context.get("user_id")
         if not user_id:
             return UserError(message="User not authenticated.")
         user = db.query(UserModel).filter(UserModel.id == user_id).first()
@@ -131,9 +132,10 @@ class TaskMutations:
         )
 
     @strawberry.mutation
-    def uncompleted_task(self, info: Info, task_id: int) -> UncompletedTaskSuccess | TaskError | UserError:
+    def uncompleted_task(self, info: Info, task_id: int,
+                         user_id: Optional[int] = None) -> UncompletedTaskSuccess | TaskError | UserError:
         db = info.context["db"]
-        user_id = info.context.get("user_id")
+        user_id = user_id or info.context.get("user_id")
         if not user_id:
             return UserError(message="User not authenticated.")
         user = db.query(UserModel).filter(UserModel.id == user_id).first()

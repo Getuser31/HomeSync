@@ -205,10 +205,15 @@ class HouseQueries:
             .first()
         )
 
+        # Build a lookup: house_id -> RoleHouseUser for the current user
+        role_by_house = {rhu.house_id: rhu for rhu in user.role_house_users}
+
         return House(
             id=house.id,
             name=house.name,
             invite_code=house.invite_code,
+            current_user_role=Role(id=rhu.role.id, name=rhu.role.name)
+            if (rhu := role_by_house.get(house.id)) else None,
             users=[
                 User(id=u.id,
                      name=u.name,
