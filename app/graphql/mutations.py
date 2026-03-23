@@ -1,8 +1,12 @@
 from datetime import datetime
+import secrets
+import string
+
 
 import strawberry
 from typing import Optional
 
+from app.graphql.types import HouseError, User, UserError
 from .types import Task, TaskCompletion, User, UserError, AuthPayload, House, \
     HouseError, TaskError, DeleteTaskSuccess, UncompletedTaskSuccess, RoleHouseUser, Role
 from ..models import Task as TaskModel
@@ -233,10 +237,34 @@ class UserMutations:
             ]
         )
 
+    @strawberry.mutation
+    def create_dummy_user_for_house(self, info: Info, houseId: int, username: str) -> UserError | HouseError | User:
+        db = info.context["db"]
+        house = db.query(HouseModel).filter(HouseModel.id == houseId).first()
+        if not house:
+            return HouseError(message="House not found.")
 
+        email = f"{username}@{house.name}.com"
+        if db.query(UserModel).filter(UserModel.email == email).first():
+            return UserError(message="User with this email already exists.")
 
+        alphabet = string.ascii_letters + string.digits + string.punctuation
+        password = ''.join(secrets.choice(alphabet) for _ in range(16))
+        new_user = UserModel(name=username, email=email, hashed_password=password, is_active=False)
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
 
+        house.users.append(new_user)
+        db.commit()
+        db.refresh(house)
 
+        return User(
+            id=new_user.id,
+            email=new_user.email,
+            name=new_user.name,
+            is_active=new_user.is_active
+        )
 
 @strawberry.type
 class HouseMutations:

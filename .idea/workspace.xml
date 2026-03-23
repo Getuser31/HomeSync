@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add roles and role-based relationships for users and houses&#10;&#10;- Define `Role` and `RoleHouseUser` models in `app/models.py` to establish user roles within houses.&#10;- Introduce `Role` and `RoleHouseUser` GraphQL types in `app/graphql/types.py`.&#10;- Update `User` and `House` GraphQL types to include `role_house_users` and `current_user_role` fields respectively.&#10;- Modify `get_me` and `get_house_by_user` queries in `app/graphql/queries.py` to fetch and resolve role data.&#10;- Add Alembic migration to create `roles` and `role_house_users` tables, and insert default &quot;admin&quot; and &quot;user&quot; roles.">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/cefc3fd67439_add_unique_constraint_to_role_house_.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add role management mutation and unique constraint&#10;&#10;- Add Alembic migration to enforce a unique constraint (`uq_role_house_user`) on `user_id` and `house_id` in the `role_house_users` table.&#10;- Implement `update_user_role` mutation in `app/graphql/mutations.py` to update a user's role in a house, including logic to prevent removing the last admin.&#10;- Add `RoleQueries` with a `get_roles` query in `app/graphql/queries.py` to fetch all available roles, and register it in `app/graphql/schema.py`.&#10;- Update `get_house_by_id` query to eagerly load and populate `role_house_users` for each user within a house.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/schema.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/schema.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -164,7 +161,7 @@
       <workItem from="1773130931052" duration="4504000" />
       <workItem from="1773736778003" duration="10374000" />
       <workItem from="1773995796321" duration="5587000" />
-      <workItem from="1774254594568" duration="6194000" />
+      <workItem from="1774254594568" duration="10435000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -318,7 +315,15 @@
       <option name="project" value="LOCAL" />
       <updated>1773760390791</updated>
     </task>
-    <option name="localTasksCounter" value="20" />
+    <task id="LOCAL-00020" summary="Add role management mutation and unique constraint&#10;&#10;- Add Alembic migration to enforce a unique constraint (`uq_role_house_user`) on `user_id` and `house_id` in the `role_house_users` table.&#10;- Implement `update_user_role` mutation in `app/graphql/mutations.py` to update a user's role in a house, including logic to prevent removing the last admin.&#10;- Add `RoleQueries` with a `get_roles` query in `app/graphql/queries.py` to fetch all available roles, and register it in `app/graphql/schema.py`.&#10;- Update `get_house_by_id` query to eagerly load and populate `role_house_users` for each user within a house.">
+      <option name="closed" value="true" />
+      <created>1774261440084</created>
+      <option name="number" value="00020" />
+      <option name="presentableId" value="LOCAL-00020" />
+      <option name="project" value="LOCAL" />
+      <updated>1774261440084</updated>
+    </task>
+    <option name="localTasksCounter" value="21" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -355,7 +360,8 @@
     <MESSAGE value="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`." />
     <MESSAGE value="Implement dynamic task completion checks and uncomplete mutation&#10;&#10;- Add `is_completed` field resolvers to `Task` and `TaskLife` GraphQL types in `app/graphql/types.py` to determine status based on recurrence period.&#10;- Implement `uncompleted_task` mutation in `app/graphql/mutations.py` to remove existing task completions.&#10;- Define `UncompletedTaskSuccess` and `UncompletedTaskResult` types.&#10;- Remove static `is_completed` field assignment in `get_tasks` query in `app/graphql/queries.py`." />
     <MESSAGE value="Add roles and role-based relationships for users and houses&#10;&#10;- Define `Role` and `RoleHouseUser` models in `app/models.py` to establish user roles within houses.&#10;- Introduce `Role` and `RoleHouseUser` GraphQL types in `app/graphql/types.py`.&#10;- Update `User` and `House` GraphQL types to include `role_house_users` and `current_user_role` fields respectively.&#10;- Modify `get_me` and `get_house_by_user` queries in `app/graphql/queries.py` to fetch and resolve role data.&#10;- Add Alembic migration to create `roles` and `role_house_users` tables, and insert default &quot;admin&quot; and &quot;user&quot; roles." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add roles and role-based relationships for users and houses&#10;&#10;- Define `Role` and `RoleHouseUser` models in `app/models.py` to establish user roles within houses.&#10;- Introduce `Role` and `RoleHouseUser` GraphQL types in `app/graphql/types.py`.&#10;- Update `User` and `House` GraphQL types to include `role_house_users` and `current_user_role` fields respectively.&#10;- Modify `get_me` and `get_house_by_user` queries in `app/graphql/queries.py` to fetch and resolve role data.&#10;- Add Alembic migration to create `roles` and `role_house_users` tables, and insert default &quot;admin&quot; and &quot;user&quot; roles." />
+    <MESSAGE value="Add role management mutation and unique constraint&#10;&#10;- Add Alembic migration to enforce a unique constraint (`uq_role_house_user`) on `user_id` and `house_id` in the `role_house_users` table.&#10;- Implement `update_user_role` mutation in `app/graphql/mutations.py` to update a user's role in a house, including logic to prevent removing the last admin.&#10;- Add `RoleQueries` with a `get_roles` query in `app/graphql/queries.py` to fetch all available roles, and register it in `app/graphql/schema.py`.&#10;- Update `get_house_by_id` query to eagerly load and populate `role_house_users` for each user within a house." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add role management mutation and unique constraint&#10;&#10;- Add Alembic migration to enforce a unique constraint (`uq_role_house_user`) on `user_id` and `house_id` in the `role_house_users` table.&#10;- Implement `update_user_role` mutation in `app/graphql/mutations.py` to update a user's role in a house, including logic to prevent removing the last admin.&#10;- Add `RoleQueries` with a `get_roles` query in `app/graphql/queries.py` to fetch all available roles, and register it in `app/graphql/schema.py`.&#10;- Update `get_house_by_id` query to eagerly load and populate `role_house_users` for each user within a house." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
