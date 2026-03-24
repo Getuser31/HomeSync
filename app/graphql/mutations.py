@@ -7,6 +7,7 @@ import strawberry
 from typing import Optional
 
 from app.graphql.types import HouseError, User, UserError, House
+from .permissions import IsHouseAdminForTask, IsHouseAdmin, IsTaskBelongToThisUser
 from .types import Task, TaskCompletion, User, UserError, AuthPayload, House, \
     HouseError, TaskError, DeleteTaskSuccess, UncompletedTaskSuccess, RoleHouseUser, Role
 from ..models import Task as TaskModel
@@ -25,7 +26,7 @@ from ..services.period_key_service import generate_period_key
 
 @strawberry.type
 class TaskMutations:
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsHouseAdmin])
     def create_task(self,
                     info: Info,
                     title: str,
@@ -55,7 +56,7 @@ class TaskMutations:
 
         return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
 
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsHouseAdminForTask])
     def delete_task(self, info: Info, task_id: int) -> DeleteTaskSuccess | TaskError:
         db = info.context["db"]
         task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
@@ -66,7 +67,7 @@ class TaskMutations:
         else:
             return TaskError(message="Task not found")
 
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsHouseAdminForTask])
     def assign_task_to_user(self, info: Info, task_id: int, user_id: int) -> Task | TaskError | UserError:
         db = info.context["db"]
         task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
@@ -82,7 +83,7 @@ class TaskMutations:
         else:
             return UserError(message="User not found")
 
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsHouseAdminForTask])
     def remove_user_from_task(self, info: Info, task_id: int, user_id: int) -> Task | TaskError | UserError:
         db = info.context["db"]
         task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
@@ -98,7 +99,7 @@ class TaskMutations:
         else:
             return UserError(message="User not found")
 
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsTaskBelongToThisUser])
     def complete_task(self, info: Info, task_id: int,
                       user_id: Optional[int] = None) -> TaskCompletion | TaskError | UserError:
         db = info.context["db"]
@@ -131,7 +132,7 @@ class TaskMutations:
             period_key=task_completion.period_key
         )
 
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsTaskBelongToThisUser])
     def uncompleted_task(self, info: Info, task_id: int,
                          user_id: Optional[int] = None) -> UncompletedTaskSuccess | TaskError | UserError:
         db = info.context["db"]
@@ -146,9 +147,10 @@ class TaskMutations:
             return TaskError(message="Task not found.")
 
         task_life = db.query(TaskLifeModel).filter(TaskLifeModel.task_id == task_id).first()
-        period = generate_period_key(task_life.recurrence.name)
 
-        task_completion = db.query(TaskCompletionModel).filter(TaskCompletionModel.task_life_id == task_life.id).first()
+        task_completion = db.query(TaskCompletionModel).filter(
+            TaskCompletionModel.task_life_id == task_life.id
+        ).order_by(TaskCompletionModel.completed_at.desc()).first()
         if not task_completion:
             return TaskError(message="Task not found.")
         db.delete(task_completion)
