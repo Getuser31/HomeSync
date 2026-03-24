@@ -1,3 +1,5 @@
+from typing import Any, Awaitable
+
 from strawberry.permission import BasePermission
 from strawberry.types import Info
 
@@ -114,3 +116,31 @@ class IsTaskBelongToThisUser(BasePermission):
         ).first()
 
         return assigned is not None
+
+
+class IsTaskBelongToTheUserHouse(BasePermission):
+    """Checks if this task is attached to the current userHouse.
+    Expects `task_id`as a resolver argument."""
+
+    message = "This task do not belong to this house"
+
+    def has_permission(self, source, info: Info, **kwargs) -> bool:
+        user_id = info.context.get("user_id")
+        task_id = kwargs.get("task_id")
+
+        if not user_id or not task_id:
+            return False
+
+        db = info.context["db"]
+        task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
+        if not task:
+            return False
+
+        house_id = task.house_id
+        HouseUser = db.query(HouseUserModel).filter(HouseUserModel.house_id == house_id,
+                                                    HouseUserModel.user_id == user_id).first()
+
+        if not HouseUser:
+            return False
+
+        return True

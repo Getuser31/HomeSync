@@ -2,6 +2,8 @@ from os import name
 
 import strawberry
 from typing import List
+from .permissions import IsTaskBelongToTheUserHouse
+
 
 from .types import Task, User, House, HouseError, UserError, TaskRecurrence, TaskLife, TaskCompletion, RoleHouseUser, \
     Role
@@ -35,10 +37,10 @@ class TaskQueries:
             for t in tasks
         ]
 
-    @strawberry.field
-    def get_task_by_id(self, info: Info, id: int) -> Task | None:
+    @strawberry.field(permission_classes=[IsTaskBelongToTheUserHouse])
+    def get_task_by_id(self, info: Info, task_id: int) -> Task | None:
         db = info.context["db"]
-        t = db.query(TaskModel).filter(TaskModel.id == id).first()
+        t = db.query(TaskModel).filter(TaskModel.id == task_id).first()
         if t:
             return Task(
                 id=t.id,

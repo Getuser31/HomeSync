@@ -6,7 +6,7 @@ import string
 import strawberry
 from typing import Optional
 
-from app.graphql.types import HouseError, User, UserError, House
+from app.graphql.types import HouseError, User, UserError, House, Task
 from .permissions import IsHouseAdminForTask, IsHouseAdmin, IsTaskBelongToThisUser
 from .types import Task, TaskCompletion, User, UserError, AuthPayload, House, \
     HouseError, TaskError, DeleteTaskSuccess, UncompletedTaskSuccess, RoleHouseUser, Role
@@ -35,8 +35,13 @@ class TaskMutations:
                     description: Optional[str] = None,
                     weight: Optional[int] = None,
                     user_id: Optional[int] = None
-                    ) -> Task:
+                    ) -> UserError | Task:
         db = info.context["db"]
+
+        if not user_id:
+            user_id = info.context.get("user_id")
+        if not user_id:
+            return UserError(message="User not authenticated.")
 
         task = TaskModel(title=title, description=description, weight=weight, house_id=house_id)
         db.add(task)
@@ -296,6 +301,15 @@ class HouseMutations:
         db.commit()
         db.refresh(new_house)
 
+        role = db.query(RoleModel).filter(RoleModel.name == "admin").first()
+        if not role:
+            return HouseError(message="Role not found")
+
+        new_house_role = RoleHouseUserModel(house_id=new_house.id, user_id=user_id, role_id=role.id)
+        db.add(new_house_role)
+        db.commit()
+        db.refresh(new_house)
+
         return House(
             id=new_house.id,
             name=new_house.name,
@@ -325,7 +339,7 @@ class HouseMutations:
             invite_code=house.invite_code
         )
 
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsHouseAdmin])
     def add_user_to_house(self, info: Info, user_id: int, house_id: int) -> House:
         db = info.context["db"]
         house = db.query(HouseModel).filter(HouseModel.id == house_id).first()
@@ -343,7 +357,7 @@ class HouseMutations:
             invite_code=house.invite_code
         )
 
-    @strawberry.mutation
+    @strawberry.mutation(permission_classes=[IsHouseAdmin])
     def remove_user_from_house(self, info: Info, user_id: int, house_id: int) -> HouseError | UserError | House:
         db = info.context["db"]
         house = db.query(HouseModel).filter(HouseModel.id == house_id).first()
@@ -361,6 +375,22 @@ class HouseMutations:
         if not user.is_active:
             db.delete(user)
             db.commit()
+
+        return House(
+            id=house.id,
+            name=house.name,
+            invite_code=house.invite_code
+        )
+
+    @strawberry.mutation(permission_classes=[IsHouseAdmin])
+    def remove_house(self, info: Info, house_id: int) -> HouseError | House:
+        db = info.context["db"]
+        house = db.query(HouseModel).filter(HouseModel.id == house_id).first()
+        if not house:
+            return HouseError(message="House not found")
+
+        db.delete(house)
+        db.commit()
 
         return House(
             id=house.id,
