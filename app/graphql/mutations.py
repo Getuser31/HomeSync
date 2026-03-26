@@ -333,6 +333,13 @@ class HouseMutations:
         house.users.append(user)
         db.commit()
         db.refresh(house)
+
+        role = db.query(RoleModel).filter(RoleModel.name == "user").first()
+        new_house_role_user = RoleHouseUserModel(house_id=house.id, user_id=user_id, role_id=role.id)
+        db.add(new_house_role_user)
+        db.commit()
+        db.refresh(new_house_role_user)
+
         return House(
             id=house.id,
             name=house.name,
