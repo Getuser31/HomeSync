@@ -10,7 +10,7 @@ from app.database import get_db
 from app.auth import decode_access_token
 
 # Operations that do not require authentication
-PUBLIC_OPERATIONS = {"Login", "CreateUser"}
+PUBLIC_OPERATIONS = {"Login", "CreateUser", "AddUser"}
 
 app = FastAPI()
 

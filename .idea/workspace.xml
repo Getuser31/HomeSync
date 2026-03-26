@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`.">
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Update migration to drop `tasks_category_id` constraints conditionally">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -164,7 +164,7 @@
       <workItem from="1774342363082" duration="12468000" />
       <workItem from="1774431010572" duration="6469000" />
       <workItem from="1774442853511" duration="1979000" />
-      <workItem from="1774512090931" duration="7964000" />
+      <workItem from="1774512090931" duration="8913000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -422,7 +422,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774519417815</updated>
     </task>
-    <option name="localTasksCounter" value="33" />
+    <task id="LOCAL-00033" summary="Remove `task_categories` table creation and cleanup Alembic migration script.">
+      <option name="closed" value="true" />
+      <created>1774521673654</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1774521673654</updated>
+    </task>
+    <task id="LOCAL-00034" summary="Update migration to drop `tasks_category_id` constraints conditionally">
+      <option name="closed" value="true" />
+      <created>1774521793856</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1774521793856</updated>
+    </task>
+    <option name="localTasksCounter" value="35" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -440,8 +456,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency." />
-    <MESSAGE value="Add `name` field to `User` model and enhance house-related GraphQL features&#10;&#10;- Add `name` column to `users` table via Alembic migration.  &#10;- Update `User` GraphQL type, queries, and mutations to include `name`.  &#10;- Enhance `House` functionality in GraphQL:  &#10;  - Add `get_house_by_invite_code` query.  &#10;  - Introduce `add_user_to_house` mutation.  &#10;- Refactor `house_service` to include `generate_unique_invite_code` utility.  &#10;- Update schema to include `HouseQueries` and refactored `HouseMutations`." />
     <MESSAGE value="feat: Implement user authentication with JWT&#10;•&#10;Add user registration with password hashing using passlib.&#10;•&#10;Implement a login mutation that returns a JWT token on successful authentication.&#10;•&#10;Create an auth.py service to handle JWT token creation.&#10;•&#10;Add user_login.py service for user login logic.&#10;•&#10;Introduce UserError and AuthPayload types for clearer GraphQL responses.&#10;•&#10;Configure CORS middleware to allow frontend requests.&#10;•&#10;Centralize environment variables in a config.py file." />
     <MESSAGE value="Add user context and enhance house-related GraphQL functionality&#10;&#10;- Include `user_id` in GraphQL request context for authentication.&#10;- Add `get_house_by_user` query to retrieve user-associated houses.&#10;- Introduce `HouseError` type and enhance GraphQL mutations for better error handling.&#10;- Update `create_house` mutation to associate newly created houses with users.&#10;- Decode JWT tokens in `auth.py` to extract user information." />
     <MESSAGE value="Add token expiration checks and enhance house-related GraphQL features&#10;&#10;- Handle expired JWT tokens in `auth.py` and enhance `decode_access_token` to return `token_expired` status.&#10;- Update GraphQL context in `main.py` to include `token_expired` flag.&#10;- Add checks for token expiration in `create_house` and `get_house_by_user` mutations/queries.&#10;- Introduce `join_house_by_invitation_code` mutation for joining a house using an invite code.&#10;- Improve user and house associations with support for nested user data in `get_house_by_user`." />
@@ -465,7 +479,9 @@
     <MESSAGE value="Load environment variables and set database URL in Alembic configuration" />
     <MESSAGE value="Escape '%' character in database URL replacement in Alembic configuration" />
     <MESSAGE value="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`." />
-    <option name="LAST_COMMIT_MESSAGE" value="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`." />
+    <MESSAGE value="Remove `task_categories` table creation and cleanup Alembic migration script." />
+    <MESSAGE value="Update migration to drop `tasks_category_id` constraints conditionally" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update migration to drop `tasks_category_id` constraints conditionally" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
