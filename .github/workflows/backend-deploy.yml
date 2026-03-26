@@ -17,7 +17,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /var/www/html/homeSync
+            cd /var/www/html/HomeSync
             git pull origin main
             source .venv/bin/activate
             pip install -r requirements.txt
