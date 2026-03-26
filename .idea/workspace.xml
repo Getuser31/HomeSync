@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add permission classes for GraphQL task mutations&#10;&#10;- Create `app/graphql/permissions.py` with custom Strawberry permission classes (`IsAuthenticated`, `IsHouseAdmin`, `IsHouseAdminForTask`, and `IsTaskBelongToThisUser`).&#10;- Apply corresponding permission classes to task-related mutations in `app/graphql/mutations.py` to enforce role-based access control.&#10;- Fix the `uncompleted_task` mutation query to correctly retrieve and delete the most recent task completion by ordering `completed_at` descending.">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/7ec4f67379f9_add_cascade_delete_on_houses.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/permissions.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/permissions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`.">
+      <change afterPath="$PROJECT_DIR$/.github/workflows/backend-deploy.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,7 +15,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="51" />
+    <option name="cachedIndexableFilesCount" value="53" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -164,7 +163,10 @@
       <workItem from="1773736778003" duration="10374000" />
       <workItem from="1773995796321" duration="5587000" />
       <workItem from="1774254594568" duration="16869000" />
-      <workItem from="1774342363082" duration="11599000" />
+      <workItem from="1774342363082" duration="12468000" />
+      <workItem from="1774431010572" duration="6469000" />
+      <workItem from="1774442853511" duration="1979000" />
+      <workItem from="1774512090931" duration="2532000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -366,7 +368,15 @@
       <option name="project" value="LOCAL" />
       <updated>1774349387404</updated>
     </task>
-    <option name="localTasksCounter" value="26" />
+    <task id="LOCAL-00026" summary="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`.">
+      <option name="closed" value="true" />
+      <created>1774364193331</created>
+      <option name="number" value="00026" />
+      <option name="presentableId" value="LOCAL-00026" />
+      <option name="project" value="LOCAL" />
+      <updated>1774364193331</updated>
+    </task>
+    <option name="localTasksCounter" value="27" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -384,7 +394,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="init commit" />
     <MESSAGE value="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`." />
     <MESSAGE value="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table." />
     <MESSAGE value="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table." />
@@ -409,11 +418,12 @@
     <MESSAGE value="Update task completion mutations, house queries, and documentation&#10;&#10;- Modify `complete_task` and `uncompleted_task` mutations in `app/graphql/mutations.py` to accept an optional `user_id`, allowing actions for specific users while defaulting to the authenticated user.&#10;- Update `get_house_by_id` query in `app/graphql/queries.py` to map and populate the `current_user_role` field for the authenticated user.&#10;- Revamp the API Usage section in `README.md` to include comprehensive tables of all available GraphQL queries and mutations, along with details on role management and authentication." />
     <MESSAGE value="Add authentication middleware for GraphQL requests&#10;&#10;- Introduce `AuthMiddleware` in `main.py` to secure the `/graphql` endpoint.&#10;- Implement Bearer token verification from the `Authorization` header to authenticate incoming requests.&#10;- Allow public access to specific GraphQL operations defined in `PUBLIC_OPERATIONS` (e.g., `Login` and `CreateUser`).&#10;- Return a structured 401 Unauthorized JSON response for unauthenticated access to protected endpoints, while handling CORS headers correctly." />
     <MESSAGE value="Add permission classes for GraphQL task mutations&#10;&#10;- Create `app/graphql/permissions.py` with custom Strawberry permission classes (`IsAuthenticated`, `IsHouseAdmin`, `IsHouseAdminForTask`, and `IsTaskBelongToThisUser`).&#10;- Apply corresponding permission classes to task-related mutations in `app/graphql/mutations.py` to enforce role-based access control.&#10;- Fix the `uncompleted_task` mutation query to correctly retrieve and delete the most recent task completion by ordering `completed_at` descending." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add permission classes for GraphQL task mutations&#10;&#10;- Create `app/graphql/permissions.py` with custom Strawberry permission classes (`IsAuthenticated`, `IsHouseAdmin`, `IsHouseAdminForTask`, and `IsTaskBelongToThisUser`).&#10;- Apply corresponding permission classes to task-related mutations in `app/graphql/mutations.py` to enforce role-based access control.&#10;- Fix the `uncompleted_task` mutation query to correctly retrieve and delete the most recent task completion by ordering `completed_at` descending." />
+    <MESSAGE value="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1773131022732" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1774431451399" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

@@ -80,10 +80,3 @@ async def get_context(request: Request, db=Depends(get_db)):
 graphql_app = GraphQLRouter(schema, context_getter=get_context)
 app.include_router(graphql_app, prefix="/graphql")
 
-@app.get("/")
-async def root():
-    return {"message": "Hello World"}
-
-@app.get("/hello/{name}")
-async def say_hello(name: str):
-    return {"message": f"Hello {name}"}
