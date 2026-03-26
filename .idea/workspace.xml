@@ -4,10 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`.">
-      <change afterPath="$PROJECT_DIR$/.github/workflows/backend-deploy.yml" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -166,7 +164,7 @@
       <workItem from="1774342363082" duration="12468000" />
       <workItem from="1774431010572" duration="6469000" />
       <workItem from="1774442853511" duration="1979000" />
-      <workItem from="1774512090931" duration="2532000" />
+      <workItem from="1774512090931" duration="7964000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -376,7 +374,55 @@
       <option name="project" value="LOCAL" />
       <updated>1774364193331</updated>
     </task>
-    <option name="localTasksCounter" value="27" />
+    <task id="LOCAL-00027" summary="Update `.idea/workspace.xml` and add `requirements.txt`&#10;&#10;- Add Python dependencies to `requirements.txt`.&#10;- Minor modifications to `.idea/workspace.xml`.&#10;- Remove unused root and `/hello` endpoints from `main.py`.">
+      <option name="closed" value="true" />
+      <created>1774514903394</created>
+      <option name="number" value="00027" />
+      <option name="presentableId" value="LOCAL-00027" />
+      <option name="project" value="LOCAL" />
+      <updated>1774514903394</updated>
+    </task>
+    <task id="LOCAL-00028" summary="Add GitHub Actions workflow for backend deployment&#10;&#10;- Create `.github/workflows/backend-deploy.yml` to automate backend deployment on `main` branch push.&#10;- Use `appleboy/ssh-action` for remote deployment, including pulling updates, installing dependencies, applying migrations, and restarting the service.">
+      <option name="closed" value="true" />
+      <created>1774514926695</created>
+      <option name="number" value="00028" />
+      <option name="presentableId" value="LOCAL-00028" />
+      <option name="project" value="LOCAL" />
+      <updated>1774514926695</updated>
+    </task>
+    <task id="LOCAL-00029" summary="Fix path case sensitivity in backend deployment workflow&#10;&#10;- Update `cd` command in `.github/workflows/backend-deploy.yml` to use the correct case: `HomeSync`.">
+      <option name="closed" value="true" />
+      <created>1774515267531</created>
+      <option name="number" value="00029" />
+      <option name="presentableId" value="LOCAL-00029" />
+      <option name="project" value="LOCAL" />
+      <updated>1774515267531</updated>
+    </task>
+    <task id="LOCAL-00030" summary="Load environment variables and set database URL in Alembic configuration">
+      <option name="closed" value="true" />
+      <created>1774515532545</created>
+      <option name="number" value="00030" />
+      <option name="presentableId" value="LOCAL-00030" />
+      <option name="project" value="LOCAL" />
+      <updated>1774515532545</updated>
+    </task>
+    <task id="LOCAL-00031" summary="Escape '%' character in database URL replacement in Alembic configuration">
+      <option name="closed" value="true" />
+      <created>1774515934764</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1774515934764</updated>
+    </task>
+    <task id="LOCAL-00032" summary="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`.">
+      <option name="closed" value="true" />
+      <created>1774519417815</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1774519417815</updated>
+    </task>
+    <option name="localTasksCounter" value="33" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -394,12 +440,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`." />
-    <MESSAGE value="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table." />
-    <MESSAGE value="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table." />
-    <MESSAGE value="Add house and task management features&#10;&#10;- Introduce `House` and `TaskCategory` models in `app/models.py` with necessary relationships.&#10;- Define GraphQL types for `House`, `TaskCategory`, and `Assignment`.&#10;- Create Alembic migrations for new tables and relationships:&#10;  - Add `houses` table and relationship with `tasks`.&#10;  - Add `task_categories` table and relationship with `tasks`.&#10;  - Add `assignments` table and relationships with `users` and `tasks`.&#10;- Update existing GraphQL types and models to include new relationships." />
-    <MESSAGE value="Add GraphQL mutations and utility for house creation&#10;&#10;- Add `HouseMutations` to support house creation via GraphQL.&#10;- Implement `_generate_invite_code` utility in `house_service.py` for unique invite codes.&#10;- Update GraphQL schema to include house-related mutations.&#10;- Introduce `field(default_factory=list)` for safer list initialization in `GraphQL` types.&#10;- Add `create_task_category` mutation for task category handling." />
-    <MESSAGE value="Add README for project setup and usage&#10;&#10;- Provide project overview, tech stack, requirements, and API usage details.&#10;- Include setup instructions for dependencies, migrations, and server startup.&#10;- Outline project structure, environment variables, and testing information.&#10;- Add placeholders for license and dependency management files." />
     <MESSAGE value="Refactor GraphQL API to use dependency injection for database sessions&#10;&#10;- Replace `SessionLocal` with database dependency injection using `Depends` and `context_getter`.&#10;- Update GraphQL queries and mutations to support the new context-based approach.&#10;- Simplify `main.py` with centralized database session management.&#10;- Adjust task, user, and house mutations/queries for `Info` dependency." />
     <MESSAGE value="Add `name` field to `User` model and enhance house-related GraphQL features&#10;&#10;- Add `name` column to `users` table via Alembic migration.  &#10;- Update `User` GraphQL type, queries, and mutations to include `name`.  &#10;- Enhance `House` functionality in GraphQL:  &#10;  - Add `get_house_by_invite_code` query.  &#10;  - Introduce `add_user_to_house` mutation.  &#10;- Refactor `house_service` to include `generate_unique_invite_code` utility.  &#10;- Update schema to include `HouseQueries` and refactored `HouseMutations`." />
     <MESSAGE value="feat: Implement user authentication with JWT&#10;•&#10;Add user registration with password hashing using passlib.&#10;•&#10;Implement a login mutation that returns a JWT token on successful authentication.&#10;•&#10;Create an auth.py service to handle JWT token creation.&#10;•&#10;Add user_login.py service for user login logic.&#10;•&#10;Introduce UserError and AuthPayload types for clearer GraphQL responses.&#10;•&#10;Configure CORS middleware to allow frontend requests.&#10;•&#10;Centralize environment variables in a config.py file." />
@@ -419,7 +459,13 @@
     <MESSAGE value="Add authentication middleware for GraphQL requests&#10;&#10;- Introduce `AuthMiddleware` in `main.py` to secure the `/graphql` endpoint.&#10;- Implement Bearer token verification from the `Authorization` header to authenticate incoming requests.&#10;- Allow public access to specific GraphQL operations defined in `PUBLIC_OPERATIONS` (e.g., `Login` and `CreateUser`).&#10;- Return a structured 401 Unauthorized JSON response for unauthenticated access to protected endpoints, while handling CORS headers correctly." />
     <MESSAGE value="Add permission classes for GraphQL task mutations&#10;&#10;- Create `app/graphql/permissions.py` with custom Strawberry permission classes (`IsAuthenticated`, `IsHouseAdmin`, `IsHouseAdminForTask`, and `IsTaskBelongToThisUser`).&#10;- Apply corresponding permission classes to task-related mutations in `app/graphql/mutations.py` to enforce role-based access control.&#10;- Fix the `uncompleted_task` mutation query to correctly retrieve and delete the most recent task completion by ordering `completed_at` descending." />
     <MESSAGE value="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`." />
+    <MESSAGE value="Update `.idea/workspace.xml` and add `requirements.txt`&#10;&#10;- Add Python dependencies to `requirements.txt`.&#10;- Minor modifications to `.idea/workspace.xml`.&#10;- Remove unused root and `/hello` endpoints from `main.py`." />
+    <MESSAGE value="Add GitHub Actions workflow for backend deployment&#10;&#10;- Create `.github/workflows/backend-deploy.yml` to automate backend deployment on `main` branch push.&#10;- Use `appleboy/ssh-action` for remote deployment, including pulling updates, installing dependencies, applying migrations, and restarting the service." />
+    <MESSAGE value="Fix path case sensitivity in backend deployment workflow&#10;&#10;- Update `cd` command in `.github/workflows/backend-deploy.yml` to use the correct case: `HomeSync`." />
+    <MESSAGE value="Load environment variables and set database URL in Alembic configuration" />
+    <MESSAGE value="Escape '%' character in database URL replacement in Alembic configuration" />
+    <MESSAGE value="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`." />
+    <option name="LAST_COMMIT_MESSAGE" value="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
