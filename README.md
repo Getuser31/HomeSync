@@ -37,14 +37,9 @@ source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
 ### 3. Install dependencies
 
-*Note: A `requirements.txt` or `pyproject.toml` was not found in the repository. You may need to install the following
-manually:*
-
 ```bash
-pip install fastapi strawberry-graphql[fastapi] sqlalchemy alembic psycopg2-binary uvicorn
+pip install -r requirements.txt
 ```
-
-*TODO: Add a proper dependency management file (requirements.txt or pyproject.toml).*
 
 ### 4. Start the Database
 
@@ -101,20 +96,26 @@ The application provides a GraphQL interface at:
 | `createUser(username, email, password)` | Register a new user |
 | `login(email, password)` | Authenticate and receive a JWT token |
 | `updateUserRole(userId, houseId, roleId)` | Update a user's role in a house |
+| `createDummyUserForHouse(houseId, username)` | Create an inactive placeholder user for a house |
 
 #### Tasks
 | Mutation | Description |
 |---|---|
-| `createTask(...)` | Create a new task |
-| `deleteTask(taskId)` | Delete a task |
+| `createTask(title, taskRecurrenceId, houseId, description?, weight?, userId?)` | Create a new task (admin only) |
+| `deleteTask(taskId)` | Delete a task (admin only) |
+| `assignTaskToUser(taskId, userId)` | Assign a task to a user (admin only) |
+| `removeUserFromTask(taskId, userId)` | Remove a user from a task (admin only) |
 | `completeTask(taskId, userId?)` | Mark a task as completed (`userId` optional, falls back to authenticated user) |
 | `uncompletedTask(taskId, userId?)` | Mark a task as uncompleted (`userId` optional, falls back to authenticated user) |
 
 #### Houses
 | Mutation | Description |
 |---|---|
-| `createHouse(name)` | Create a new house |
-| `removeUserFromHouse(userId, houseId)` | Remove a user from a house |
+| `createHouse(name)` | Create a new house (creator is assigned admin role) |
+| `joinHouseByInvitationCode(inviteCode)` | Join a house using an invite code (assigned member role) |
+| `addUserToHouse(userId, houseId)` | Add a user to a house (admin only) |
+| `removeUserFromHouse(userId, houseId)` | Remove a user from a house (admin only) |
+| `removeHouse(houseId)` | Delete a house and all its data (admin only) |
 
 ### Roles
 
@@ -151,13 +152,18 @@ WebStorm or PyCharm with the HTTP Client plugin).
 
 *TODO: Implement automated unit and integration tests.*
 
+## 🚢 CI/CD
+
+A GitHub Actions workflow (`.github/workflows/backend-deploy.yml`) automatically deploys the backend on pushes to `main`.
+
 ## 🔐 Environment Variables
 
-The application uses the following environment variables (defaults are in `app/database.py` and `alembic.ini`):
+The application uses the following environment variables. Copy `.env.example` to `.env` and fill in the values:
 
 | Variable       | Description                  | Default                                           |
 |----------------|------------------------------|---------------------------------------------------|
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://myuser:password@localhost/homesync` |
+| `SECRET_KEY`   | JWT signing secret           | —                                                 |
 
 ## 📜 License
 
