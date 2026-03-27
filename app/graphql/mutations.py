@@ -194,6 +194,7 @@ class UserMutations:
     @strawberry.mutation
     def login(self, info: Info, email: str, password: str) -> AuthPayload | UserError:
         db = info.context["db"]
+        email = email.lower()
         token = login_user(db, email, password)
         if token is None:
             return UserError(message="Invalid email or password.")
