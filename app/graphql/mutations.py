@@ -324,7 +324,11 @@ class UserMutations:
 
         alphabet = string.ascii_letters + string.digits + string.punctuation
         password = ''.join(secrets.choice(alphabet) for _ in range(16))
-        new_user = UserModel(name=username, email=email, hashed_password=password, is_active=False)
+
+        pwd_context = CryptContext(schemes=["bcrypt"])
+        hashed_password = pwd_context.hash(password)
+
+        new_user = UserModel(name=username, email=email, hashed_password=hashed_password, is_active=False)
         db.add(new_user)
         db.commit()
         db.refresh(new_user)
