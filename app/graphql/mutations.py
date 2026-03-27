@@ -2,9 +2,10 @@ from datetime import datetime
 import secrets
 import string
 
-
 import strawberry
 from typing import Optional
+
+from ..services.email_validator import check_email_format
 
 from app.graphql.types import HouseError, User, UserError, House, Task
 from .permissions import IsHouseAdminForTask, IsHouseAdmin, IsTaskBelongToThisUser
@@ -163,9 +164,6 @@ class TaskMutations:
         return UncompletedTaskSuccess()
 
 
-
-
-
 @strawberry.type
 class UserMutations:
     @strawberry.mutation
@@ -173,9 +171,14 @@ class UserMutations:
         db = info.context["db"]
 
         email = email.lower()
+        if not check_email_format(email):
+            return UserError(message="Invalid email format.")
 
         if db.query(UserModel).filter(UserModel.email == email).first():
             return UserError(message=f"An account with email '{email}' already exists.")
+
+        if len(password) < 8:
+            return UserError(message="New password must be at least 8 characters.")
 
         pwd_context = CryptContext(schemes=["bcrypt"])
         hashed_password = pwd_context.hash(password)
@@ -248,6 +251,67 @@ class UserMutations:
         )
 
     @strawberry.mutation
+    def update_password(self, info: Info, password: str, new_password: str) -> UserError | User:
+        db = info.context["db"]
+        if info.context.get("token_expired"):
+            return UserError(message="TOKEN_EXPIRED")
+        user_id = info.context.get("user_id")
+        if not user_id:
+            return UserError(message="User not authenticated.")
+        if len(new_password) < 8:
+            return UserError(message="New password must be at least 8 characters.")
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return UserError(message="User not found.")
+
+        pwd_context = CryptContext(schemes=["bcrypt"])
+        if not pwd_context.verify(password, user.hashed_password):
+            return UserError(message="Incorrect current password.")
+
+        user.hashed_password = pwd_context.hash(new_password)
+        db.commit()
+        db.refresh(user)
+
+        return User(
+            id=user.id,
+            email=user.email,
+            name=user.name
+        )
+
+    @strawberry.mutation
+    def update_email(self, info: Info, password: str, new_email: str) -> UserError | User:
+        db = info.context["db"]
+        if info.context.get("token_expired"):
+            return UserError(message="TOKEN_EXPIRED")
+        user_id = info.context.get("user_id")
+        if not user_id:
+            return UserError(message="User not authenticated.")
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return UserError(message="User not found.")
+
+        if not user.is_active:
+            return UserError(message="User is not active.")
+
+        new_email = new_email.lower()
+
+        if not check_email_format(new_email):
+            return UserError(message="Invalid email format.")
+
+        if db.query(UserModel).filter(UserModel.email == new_email).first():
+            return UserError(message=f"An account with email '{new_email}' already exists.")
+
+        pwd_context = CryptContext(schemes=["bcrypt"])
+        if not pwd_context.verify(password, user.hashed_password):
+            return UserError(message="Incorrect current password.")
+
+        user.email = new_email
+        db.commit()
+        db.refresh(user)
+
+        return User(email=user.email, name=user.name, id=user.id)
+
+    @strawberry.mutation
     def create_dummy_user_for_house(self, info: Info, houseId: int, username: str) -> UserError | HouseError | User:
         db = info.context["db"]
         house = db.query(HouseModel).filter(HouseModel.id == houseId).first()
@@ -275,6 +339,7 @@ class UserMutations:
             name=new_user.name,
             is_active=new_user.is_active
         )
+
 
 @strawberry.type
 class HouseMutations:
