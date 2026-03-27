@@ -4,11 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add `update_password` and `update_email` mutations with enhanced validation">
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add cascading delete behavior to foreign key relationships and update schema migration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +168,7 @@
       <workItem from="1774512090931" duration="9593000" />
       <workItem from="1774523171761" duration="358000" />
       <workItem from="1774533306035" duration="1651000" />
-      <workItem from="1774607219100" duration="7366000" />
+      <workItem from="1774607219100" duration="8041000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -492,7 +490,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774614594179</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="Set proper cascading rules for foreign key relationships and adjust mutations  &#10;&#10;- Add `ondelete` cascading behavior to various foreign key constraints in models (`CASCADE`, `SET NULL`).&#10;- Create Alembic migrations to implement schema updates for cascading rules.&#10;- Adjust `TaskCompletion` and related types to support nullable `user_who_completed_id`.&#10;- Update GraphQL mutations to initialize roles for new users in houses.">
+      <option name="closed" value="true" />
+      <created>1774617838131</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1774617838131</updated>
+    </task>
+    <task id="LOCAL-00042" summary="Add cascading delete behavior to foreign key relationships and update schema migration">
+      <option name="closed" value="true" />
+      <created>1774618084841</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1774618084841</updated>
+    </task>
+    <option name="localTasksCounter" value="43" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -510,8 +524,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add delete task mutation and enhance task error handling&#10;&#10;- Define `TaskError`, `DeleteTaskSuccess`, and related unions in `app/graphql/types.py`.&#10;- Implement `delete_task` mutation in `app/graphql/mutations.py` to remove tasks by ID.&#10;- Update `assign_task_to_user` and `remove_user_from_task` to return specific `TaskError` or `UserError` instead of a generic message." />
-    <MESSAGE value="Implement task completion logic and current user query&#10;&#10;- Add `complete_task` mutation in `app/graphql/mutations.py` to handle task completion events.&#10;- Create `app/services/period_key_service.py` to generate period keys based on task recurrence (Daily, Weekly, Monthly).&#10;- Add `get_me` query in `app/graphql/queries.py` to fetch authenticated user details.&#10;- Add explanatory comment for `period_key` in `app/graphql/types.py`." />
     <MESSAGE value="Implement dynamic task completion checks and uncomplete mutation&#10;&#10;- Add `is_completed` field resolvers to `Task` and `TaskLife` GraphQL types in `app/graphql/types.py` to determine status based on recurrence period.&#10;- Implement `uncompleted_task` mutation in `app/graphql/mutations.py` to remove existing task completions.&#10;- Define `UncompletedTaskSuccess` and `UncompletedTaskResult` types.&#10;- Remove static `is_completed` field assignment in `get_tasks` query in `app/graphql/queries.py`." />
     <MESSAGE value="Add roles and role-based relationships for users and houses&#10;&#10;- Define `Role` and `RoleHouseUser` models in `app/models.py` to establish user roles within houses.&#10;- Introduce `Role` and `RoleHouseUser` GraphQL types in `app/graphql/types.py`.&#10;- Update `User` and `House` GraphQL types to include `role_house_users` and `current_user_role` fields respectively.&#10;- Modify `get_me` and `get_house_by_user` queries in `app/graphql/queries.py` to fetch and resolve role data.&#10;- Add Alembic migration to create `roles` and `role_house_users` tables, and insert default &quot;admin&quot; and &quot;user&quot; roles." />
     <MESSAGE value="Add role management mutation and unique constraint&#10;&#10;- Add Alembic migration to enforce a unique constraint (`uq_role_house_user`) on `user_id` and `house_id` in the `role_house_users` table.&#10;- Implement `update_user_role` mutation in `app/graphql/mutations.py` to update a user's role in a house, including logic to prevent removing the last admin.&#10;- Add `RoleQueries` with a `get_roles` query in `app/graphql/queries.py` to fetch all available roles, and register it in `app/graphql/schema.py`.&#10;- Update `get_house_by_id` query to eagerly load and populate `role_house_users` for each user within a house." />
@@ -535,7 +547,9 @@
     <MESSAGE value="Update README.md with dependency management, new mutations, and CI/CD details" />
     <MESSAGE value="Normalize email input in `login` mutation to ensure case-insensitive authentication" />
     <MESSAGE value="Add `update_password` and `update_email` mutations with enhanced validation" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add `update_password` and `update_email` mutations with enhanced validation" />
+    <MESSAGE value="Set proper cascading rules for foreign key relationships and adjust mutations  &#10;&#10;- Add `ondelete` cascading behavior to various foreign key constraints in models (`CASCADE`, `SET NULL`).&#10;- Create Alembic migrations to implement schema updates for cascading rules.&#10;- Adjust `TaskCompletion` and related types to support nullable `user_who_completed_id`.&#10;- Update GraphQL mutations to initialize roles for new users in houses." />
+    <MESSAGE value="Add cascading delete behavior to foreign key relationships and update schema migration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add cascading delete behavior to foreign key relationships and update schema migration" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

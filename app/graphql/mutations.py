@@ -468,6 +468,12 @@ class HouseMutations:
         if not house:
             return HouseError(message="House not found")
 
+        ##Remove all inactive_user associated to this house
+        inactive_users = [user for user in house.users if not user.is_active]
+        for user in inactive_users:
+            db.delete(user)
+        db.commit()
+
         db.delete(house)
         db.commit()
 
