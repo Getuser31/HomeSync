@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Hash user passwords even for dummy user with bcrypt in `create_user` mutation for improved security">
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Include house invite code in email generation for `create_user` mutation to ensure uniqueness">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,7 +170,7 @@
       <workItem from="1774533306035" duration="1651000" />
       <workItem from="1774607219100" duration="8403000" />
       <workItem from="1774624572299" duration="866000" />
-      <workItem from="1774626021731" duration="372000" />
+      <workItem from="1774626021731" duration="1133000" />
     </task>
     <task id="LOCAL-00001" summary="init commit">
       <option name="closed" value="true" />
@@ -540,7 +540,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774625421811</updated>
     </task>
-    <option name="localTasksCounter" value="47" />
+    <task id="LOCAL-00047" summary="Prevent self-removal from a house in `remove_user_from_house` mutation">
+      <option name="closed" value="true" />
+      <created>1774626547848</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1774626547848</updated>
+    </task>
+    <task id="LOCAL-00048" summary="Include house invite code in email generation for `create_user` mutation to ensure uniqueness">
+      <option name="closed" value="true" />
+      <created>1774626705698</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1774626705698</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -558,8 +574,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add `remove_user_from_house` mutation&#10;&#10;- Introduce mutation in `app/graphql/mutations.py` to remove a user from a house.&#10;- Ensure validation for house and user existence before removal.&#10;- Automatically delete inactive users after removal." />
-    <MESSAGE value="Update task completion mutations, house queries, and documentation&#10;&#10;- Modify `complete_task` and `uncompleted_task` mutations in `app/graphql/mutations.py` to accept an optional `user_id`, allowing actions for specific users while defaulting to the authenticated user.&#10;- Update `get_house_by_id` query in `app/graphql/queries.py` to map and populate the `current_user_role` field for the authenticated user.&#10;- Revamp the API Usage section in `README.md` to include comprehensive tables of all available GraphQL queries and mutations, along with details on role management and authentication." />
     <MESSAGE value="Add authentication middleware for GraphQL requests&#10;&#10;- Introduce `AuthMiddleware` in `main.py` to secure the `/graphql` endpoint.&#10;- Implement Bearer token verification from the `Authorization` header to authenticate incoming requests.&#10;- Allow public access to specific GraphQL operations defined in `PUBLIC_OPERATIONS` (e.g., `Login` and `CreateUser`).&#10;- Return a structured 401 Unauthorized JSON response for unauthenticated access to protected endpoints, while handling CORS headers correctly." />
     <MESSAGE value="Add permission classes for GraphQL task mutations&#10;&#10;- Create `app/graphql/permissions.py` with custom Strawberry permission classes (`IsAuthenticated`, `IsHouseAdmin`, `IsHouseAdminForTask`, and `IsTaskBelongToThisUser`).&#10;- Apply corresponding permission classes to task-related mutations in `app/graphql/mutations.py` to enforce role-based access control.&#10;- Fix the `uncompleted_task` mutation query to correctly retrieve and delete the most recent task completion by ordering `completed_at` descending." />
     <MESSAGE value="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`." />
@@ -583,7 +597,9 @@
     <MESSAGE value="Prevent last user from being removed from a house in GraphQL mutation" />
     <MESSAGE value="Add `remember_me` option to `login` mutation and update token expiration logic" />
     <MESSAGE value="Hash user passwords even for dummy user with bcrypt in `create_user` mutation for improved security" />
-    <option name="LAST_COMMIT_MESSAGE" value="Hash user passwords even for dummy user with bcrypt in `create_user` mutation for improved security" />
+    <MESSAGE value="Prevent self-removal from a house in `remove_user_from_house` mutation" />
+    <MESSAGE value="Include house invite code in email generation for `create_user` mutation to ensure uniqueness" />
+    <option name="LAST_COMMIT_MESSAGE" value="Include house invite code in email generation for `create_user` mutation to ensure uniqueness" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

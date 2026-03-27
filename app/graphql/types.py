@@ -102,6 +102,7 @@ CreateUserResult = strawberry.union("CreateUserResult", types=(User, UserError))
 @strawberry.type
 class AuthPayload:
     token: str
+    user: Optional[User] = None
 
 LoginResult = strawberry.union("LoginResult", types=(AuthPayload, UserError))
 

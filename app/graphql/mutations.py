@@ -201,7 +201,9 @@ class UserMutations:
         token = login_user(db, email, password, remember_me)
         if token is None:
             return UserError(message="Invalid email or password.")
-        return AuthPayload(token=token)
+        db_user = db.query(UserModel).filter(UserModel.email == email).first()
+        return AuthPayload(token=token, user=User(id=db_user.id, name=db_user.name, email=db_user.email,
+                                                  is_active=db_user.is_active))
 
     @strawberry.mutation
     def update_user_role(self, info: Info, house_id: int, role_id: int, user_id: int) -> UserError | HouseError | User:
