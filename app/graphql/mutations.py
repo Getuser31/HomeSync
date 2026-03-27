@@ -447,6 +447,10 @@ class HouseMutations:
         if not user:
             return UserError(message="User not found")
 
+        usersOfHouse = [user for user in house.users]
+        if len(usersOfHouse) == 1:
+            return HouseError(message="Last user in the house cannot be removed.")
+
         house.users.remove(user)
         db.commit()
         db.refresh(house)
