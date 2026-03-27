@@ -318,7 +318,7 @@ class UserMutations:
         if not house:
             return HouseError(message="House not found.")
 
-        email = f"{username}@{house.name}.com".lower()
+        email = f"{username}@{house.name}.{house.invite_code}.com".lower()
         if db.query(UserModel).filter(UserModel.email == email).first():
             return UserError(message="User with this email already exists.")
 
