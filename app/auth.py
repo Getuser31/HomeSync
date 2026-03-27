@@ -18,10 +18,12 @@ def decode_access_token(token: str) -> tuple[int | None, bool]:
         return None, False
 
 
-def create_access_token(user_id: int, email: str) -> str:
+def create_access_token(user_id: int, email: str, remember_me: bool = False) -> str:
+    expire_minutes = 60 * 24 * 365 if remember_me else ACCESS_TOKEN_EXPIRE_MINUTES
+
     payload = {
         "sub": str(user_id),
         "email": email,
-        "exp": datetime.utcnow() + timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+        "exp": datetime.utcnow() + timedelta(minutes=expire_minutes)
     }
     return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
