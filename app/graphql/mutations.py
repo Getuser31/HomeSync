@@ -333,6 +333,12 @@ class UserMutations:
         db.commit()
         db.refresh(house)
 
+        newRoleHouseUser = RoleHouseUserModel(house_id=houseId, user_id=new_user.id, role_id=2)
+        db.add(newRoleHouseUser)
+        db.commit()
+        db.refresh(newRoleHouseUser)
+
+
         return User(
             id=new_user.id,
             email=new_user.email,

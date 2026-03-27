@@ -7,14 +7,14 @@ class HouseUser(Base):
     __tablename__ = "house_users"
 
     house_id = Column(Integer, ForeignKey("houses.id"), primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
 
 
 class TaskLifeUser(Base):
     __tablename__ = "task_life_users"
 
     task_life_id = Column(Integer, ForeignKey("task_lives.id"), primary_key=True)
-    user_id = Column(Integer, ForeignKey("users.id"), primary_key=True)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
 
 
 class House(Base):
@@ -70,7 +70,7 @@ class TaskCompletion(Base):
 
     id = Column(Integer, primary_key=True)
     task_life_id = Column(Integer, ForeignKey("task_lives.id"))
-    user_who_completed_id = Column(Integer, ForeignKey("users.id"))
+    user_who_completed_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     completed_at = Column(DateTime)
     period_key = Column(String)
 
@@ -90,7 +90,7 @@ class RoleHouseUser(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     house_id = Column(Integer, ForeignKey("houses.id"), nullable=False)
 
     __table_args__ = (UniqueConstraint("user_id", "house_id", name="uq_role_house_user"),)
@@ -109,4 +109,4 @@ class User(Base):
     is_active = Column(Boolean, default=True)
 
     houses = relationship("House", secondary="house_users", back_populates="users")
-    role_house_users = relationship("RoleHouseUser", foreign_keys="RoleHouseUser.user_id")
+    role_house_users = relationship("RoleHouseUser", foreign_keys="RoleHouseUser.user_id", passive_deletes=True)
