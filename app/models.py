@@ -6,14 +6,14 @@ from .database import Base
 class HouseUser(Base):
     __tablename__ = "house_users"
 
-    house_id = Column(Integer, ForeignKey("houses.id"), primary_key=True)
+    house_id = Column(Integer, ForeignKey("houses.id", ondelete="CASCADE"), primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
 
 
 class TaskLifeUser(Base):
     __tablename__ = "task_life_users"
 
-    task_life_id = Column(Integer, ForeignKey("task_lives.id"), primary_key=True)
+    task_life_id = Column(Integer, ForeignKey("task_lives.id", ondelete="CASCADE"), primary_key=True)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), primary_key=True)
 
 
@@ -36,7 +36,7 @@ class Task(Base):
     description = Column(String, nullable=True)
     weight = Column(Integer)
 
-    house_id = Column(Integer, ForeignKey("houses.id"))
+    house_id = Column(Integer, ForeignKey("houses.id", ondelete="CASCADE"))
     house = relationship("House", back_populates="tasks")
 
     task_lives = relationship("TaskLife", back_populates="task")
@@ -56,7 +56,7 @@ class TaskLife(Base):
     __tablename__ = "task_lives"
 
     id = Column(Integer, primary_key=True)
-    task_id = Column(Integer, ForeignKey("tasks.id"))
+    task_id = Column(Integer, ForeignKey("tasks.id", ondelete="CASCADE"))
     recurrence_id = Column(Integer, ForeignKey("task_recurrences.id"))
 
     task = relationship("Task", back_populates="task_lives")
@@ -69,7 +69,7 @@ class TaskCompletion(Base):
     __tablename__ = "task_completions"
 
     id = Column(Integer, primary_key=True)
-    task_life_id = Column(Integer, ForeignKey("task_lives.id"))
+    task_life_id = Column(Integer, ForeignKey("task_lives.id", ondelete="CASCADE"))
     user_who_completed_id = Column(Integer, ForeignKey("users.id", ondelete="SET NULL"), nullable=True)
     completed_at = Column(DateTime)
     period_key = Column(String)
@@ -91,7 +91,7 @@ class RoleHouseUser(Base):
     id = Column(Integer, primary_key=True, index=True)
     role_id = Column(Integer, ForeignKey("roles.id"), nullable=False)
     user_id = Column(Integer, ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
-    house_id = Column(Integer, ForeignKey("houses.id"), nullable=False)
+    house_id = Column(Integer, ForeignKey("houses.id", ondelete="CASCADE"), nullable=False)
 
     __table_args__ = (UniqueConstraint("user_id", "house_id", name="uq_role_house_user"),)
 
