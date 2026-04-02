@@ -5,6 +5,8 @@ import string
 import strawberry
 from typing import Optional
 
+from strawberry.scalars import JSON
+
 from ..services.email_validator import check_email_format
 
 from app.graphql.types import HouseError, User, UserError, House, Task
@@ -351,6 +353,39 @@ class UserMutations:
             name=new_user.name,
             is_active=new_user.is_active
         )
+
+    @strawberry.mutation
+    def update_user_configuration(self, info: Info, userConfiguration: JSON) -> UserError | User:
+        db = info.context["db"]
+        if info.context.get("token_expired"):
+            return UserError(message="TOKEN_EXPIRED")
+        user_id = info.context.get("user_id")
+        if not user_id:
+            return UserError(message="User not authenticated.")
+        user = db.query(UserModel).filter(UserModel.id == user_id).first()
+        if not user:
+            return UserError(message="User not found.")
+
+        def deep_merge(base: dict, override: dict) -> dict:
+            result = base.copy()
+            for key, value in override.items():
+                if key in result and isinstance(result[key], dict) and isinstance(value, dict):
+                    result[key] = deep_merge(result[key], value)
+                else:
+                    result[key] = value
+            return result
+
+        existing = user.user_configuration or {}
+        user.user_configuration = deep_merge(existing, userConfiguration)
+        db.commit()
+        db.refresh(user)
+        return User(
+            id=user.id,
+            email=user.email,
+            name=user.name,
+            user_configuration=user.user_configuration
+        )
+
 
 
 @strawberry.type

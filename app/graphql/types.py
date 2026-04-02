@@ -1,4 +1,5 @@
 import strawberry
+from strawberry.scalars import JSON
 from typing import Optional, List, TYPE_CHECKING
 from datetime import datetime
 from dataclasses import field
@@ -79,6 +80,7 @@ class User:
     email: str
     name: str
     is_active: bool = True
+    user_configuration: Optional[JSON] = None
     houses: List["House"] = field(default_factory=list)
     role_house_users: List[RoleHouseUser] = field(default_factory=list)
 

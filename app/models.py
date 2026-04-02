@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, UniqueConstraint
+from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, UniqueConstraint, JSON
 from sqlalchemy.orm import relationship
 from .database import Base
 
@@ -107,6 +107,7 @@ class User(Base):
     name = Column(String)
     hashed_password = Column(String)
     is_active = Column(Boolean, default=True)
+    user_configuration = Column(JSON, nullable=True, default=dict)
 
     houses = relationship("House", secondary="house_users", back_populates="users")
     role_house_users = relationship("RoleHouseUser", foreign_keys="RoleHouseUser.user_id", passive_deletes=True)

@@ -92,6 +92,8 @@ class UserQueries:
         if info.context.get("token_expired"):
             raise ValueError("TOKEN_EXPIRED")
         userId = info.context['user_id']
+        if not userId:
+            return UserError(message="User not authenticated.")
         user = db.query(UserModel).filter(UserModel.id == userId).first()
         if not user:
             return UserError(message="User not found")
@@ -99,6 +101,7 @@ class UserQueries:
             id=user.id,
             name=user.name,
             email=user.email,
+            user_configuration=user.user_configuration,
             role_house_users=[
                 RoleHouseUser(
                     id=rhu.id,
