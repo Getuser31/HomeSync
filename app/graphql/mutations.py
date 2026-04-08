@@ -58,7 +58,7 @@ class TaskMutations:
 
         if user_id:
             user = db.get(UserModel, user_id)
-            if user:  ##@todo need to check the user belong to this house
+            if user:
                 task_life.assigned_users.append(user)
                 db.commit()
 
@@ -78,7 +78,7 @@ class TaskMutations:
         db.commit()
         db.refresh(task)
         return Task(id=task.id, title=task.title, description=task.description, weight=task.weight,
-                    time_to_complete=task.time_to_complete)
+                    time_to_complete=task.time_to_complete, date_created=task.date_created)
 
     @strawberry.mutation(permission_classes=[IsHouseAdminForTask])
     def delete_task(self, info: Info, task_id: int) -> DeleteTaskSuccess | TaskError:

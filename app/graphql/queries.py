@@ -48,6 +48,7 @@ class TaskQueries:
                 description=t.description,
                 weight=t.weight,
                 time_to_complete=t.time_to_complete,
+                date_created=t.date_created,
                 house=House(
                     id=t.house.id,
                     name=t.house.name,
@@ -239,6 +240,8 @@ class HouseQueries:
                     title=t.title,
                     description=t.description,
                     weight=t.weight,
+                    time_to_complete=t.time_to_complete,
+                    date_created=t.date_created,
                     task_lives=[
                         TaskLife(
                             id=tl.id,

@@ -4,8 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add `user_configuration` JSON column to users table via migration">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add `time_to_complete` field to `Task` model and update related GraphQL mutations and queries&#10;&#10;- Extend `Task` model with `time_to_complete` field.&#10;- Update GraphQL schema to include `time_to_complete` in `Task` type.&#10;- Add `time_to_complete` support to `update_task` mutation.&#10;- Create Alembic migration to modify the database schema.">
+      <change afterPath="$PROJECT_DIR$/alembic/versions/133920bf2a24_add_created_at_time_on_the_task.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
@@ -178,15 +178,7 @@
       <workItem from="1774626021731" duration="1369000" />
       <workItem from="1775115585049" duration="9914000" />
       <workItem from="1775202152909" duration="1193000" />
-      <workItem from="1775638091640" duration="4145000" />
-    </task>
-    <task id="LOCAL-00003" summary="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`.">
-      <option name="closed" value="true" />
-      <created>1771323567929</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1771323567929</updated>
+      <workItem from="1775638091640" duration="8689000" />
     </task>
     <task id="LOCAL-00004" summary="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table.">
       <option name="closed" value="true" />
@@ -572,7 +564,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775139912009</updated>
     </task>
-    <option name="localTasksCounter" value="52" />
+    <task id="LOCAL-00052" summary="Add `time_to_complete` field to `Task` model and update related GraphQL mutations and queries&#10;&#10;- Extend `Task` model with `time_to_complete` field.&#10;- Update GraphQL schema to include `time_to_complete` in `Task` type.&#10;- Add `time_to_complete` support to `update_task` mutation.&#10;- Create Alembic migration to modify the database schema.">
+      <option name="closed" value="true" />
+      <created>1775642418210</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1775642418210</updated>
+    </task>
+    <option name="localTasksCounter" value="53" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -590,8 +590,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Update `.idea/workspace.xml` and add `requirements.txt`&#10;&#10;- Add Python dependencies to `requirements.txt`.&#10;- Minor modifications to `.idea/workspace.xml`.&#10;- Remove unused root and `/hello` endpoints from `main.py`." />
-    <MESSAGE value="Add GitHub Actions workflow for backend deployment&#10;&#10;- Create `.github/workflows/backend-deploy.yml` to automate backend deployment on `main` branch push.&#10;- Use `appleboy/ssh-action` for remote deployment, including pulling updates, installing dependencies, applying migrations, and restarting the service." />
     <MESSAGE value="Fix path case sensitivity in backend deployment workflow&#10;&#10;- Update `cd` command in `.github/workflows/backend-deploy.yml` to use the correct case: `HomeSync`." />
     <MESSAGE value="Load environment variables and set database URL in Alembic configuration" />
     <MESSAGE value="Escape '%' character in database URL replacement in Alembic configuration" />
@@ -615,7 +613,9 @@
     <MESSAGE value="Include user details in `login` mutation response for enhanced client-side context" />
     <MESSAGE value="Add `user_configuration` field to user model and implement update mutation&#10;&#10;- Extend `UserModel` with a new `user_configuration` JSON column.&#10;- Update GraphQL schema to include `user_configuration` in user type and queries.&#10;- Add `update_user_configuration` mutation to allow deep merging of user configuration." />
     <MESSAGE value="Add `user_configuration` JSON column to users table via migration" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add `user_configuration` JSON column to users table via migration" />
+    <MESSAGE value="Add `time_to_complete` field to the `Task` model and GraphQL schema&#10;&#10;- Extend `TaskModel` with a nullable `time_to_complete` column.&#10;- Update the GraphQL schema, types, and queries to include the `time_to_complete` field.&#10;- Implement `update_task` mutation to allow editing of `time_to_complete` alongside other task attributes." />
+    <MESSAGE value="Add `time_to_complete` field to `Task` model and update related GraphQL mutations and queries&#10;&#10;- Extend `Task` model with `time_to_complete` field.&#10;- Update GraphQL schema to include `time_to_complete` in `Task` type.&#10;- Add `time_to_complete` support to `update_task` mutation.&#10;- Create Alembic migration to modify the database schema." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `time_to_complete` field to `Task` model and update related GraphQL mutations and queries&#10;&#10;- Extend `Task` model with `time_to_complete` field.&#10;- Update GraphQL schema to include `time_to_complete` in `Task` type.&#10;- Add `time_to_complete` support to `update_task` mutation.&#10;- Create Alembic migration to modify the database schema." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

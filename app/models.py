@@ -1,3 +1,4 @@
+from datetime import datetime
 from sqlalchemy import Column, Integer, String, Boolean, ForeignKey, DateTime, UniqueConstraint, JSON
 from sqlalchemy.orm import relationship
 from .database import Base
@@ -35,6 +36,7 @@ class Task(Base):
     title = Column(String, index=True)
     description = Column(String, nullable=True)
     weight = Column(Integer)
+    date_created = Column(DateTime, default=datetime.now)
     time_to_complete = Column(Integer, nullable=True)
 
     house_id = Column(Integer, ForeignKey("houses.id", ondelete="CASCADE"))
