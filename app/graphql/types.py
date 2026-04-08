@@ -16,6 +16,7 @@ class Task:
     title: str
     description: Optional[str] = None
     weight: int
+    time_to_complete: Optional[int] = None
     house: Optional["House"] = None
     task_lives: List["TaskLife"] = field(default_factory=list)
 

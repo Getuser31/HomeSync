@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Include user details in `login` mutation response for enhanced client-side context">
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add `user_configuration` JSON column to users table via migration">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
@@ -17,7 +17,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="60" />
+    <option name="cachedIndexableFilesCount" value="62" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -65,36 +65,36 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "FastAPI.HomeSync.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.MCP Project settings loaded": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "RunOnceActivity.typescript.service.memoryLimit.init": "true",
-    "ai.playground.ignore.import.keys.banner.in.settings": "true",
-    "codeWithMe.voiceChat.enabledByDefault": "false",
-    "com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1": "true",
-    "git-widget-placeholder": "main",
-    "junie.onboarding.icon.badge.shown": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.pluginManager",
-    "to.speed.mode.migration.done": "true",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;FastAPI.HomeSync.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.MCP Project settings loaded&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
+    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
+    &quot;codeWithMe.voiceChat.enabledByDefault&quot;: &quot;false&quot;,
+    &quot;com.intellij.ml.llm.matterhorn.ej.ui.settings.DefaultModelSelectionForGA.v1&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;junie.onboarding.icon.badge.shown&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;to.speed.mode.migration.done&quot;: &quot;true&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   },
-  "keyToStringList": {
-    "DatabaseDriversLRU": [
-      "postgresql"
+  &quot;keyToStringList&quot;: {
+    &quot;DatabaseDriversLRU&quot;: [
+      &quot;postgresql&quot;
     ]
   }
-}]]></component>
+}</component>
   <component name="RecapSpentCounter">
     <option name="endsOfQuotaMs" value="1773300762143" />
     <option name="spentUsd" value="0.59280574" />
@@ -176,23 +176,9 @@
       <workItem from="1774607219100" duration="8403000" />
       <workItem from="1774624572299" duration="866000" />
       <workItem from="1774626021731" duration="1369000" />
-      <workItem from="1775115585049" duration="8227000" />
-    </task>
-    <task id="LOCAL-00001" summary="init commit">
-      <option name="closed" value="true" />
-      <created>1771317776486</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1771317776486</updated>
-    </task>
-    <task id="LOCAL-00002" summary="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`.">
-      <option name="closed" value="true" />
-      <created>1771322066309</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1771322066309</updated>
+      <workItem from="1775115585049" duration="9914000" />
+      <workItem from="1775202152909" duration="1193000" />
+      <workItem from="1775638091640" duration="4145000" />
     </task>
     <task id="LOCAL-00003" summary="Refactor GraphQL structure and add database setup&#10;&#10;- Modularize GraphQL implementation by splitting schema, types, queries, and mutations into `app/graphql/`.&#10;- Add SQLAlchemy configuration in `app/database.py` and define `Task` model in `app/models.py`.&#10;- Update `main.py` to import the schema from the new location.&#10;- Add `Dockerfile` and `docker-compose.yml` for PostgreSQL setup.&#10;- Remove obsolete `schema.py`.">
       <option name="closed" value="true" />
@@ -570,7 +556,23 @@
       <option name="project" value="LOCAL" />
       <updated>1774627338652</updated>
     </task>
-    <option name="localTasksCounter" value="50" />
+    <task id="LOCAL-00050" summary="Add `user_configuration` field to user model and implement update mutation&#10;&#10;- Extend `UserModel` with a new `user_configuration` JSON column.&#10;- Update GraphQL schema to include `user_configuration` in user type and queries.&#10;- Add `update_user_configuration` mutation to allow deep merging of user configuration.">
+      <option name="closed" value="true" />
+      <created>1775138980123</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1775138980123</updated>
+    </task>
+    <task id="LOCAL-00051" summary="Add `user_configuration` JSON column to users table via migration">
+      <option name="closed" value="true" />
+      <created>1775139912009</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1775139912009</updated>
+    </task>
+    <option name="localTasksCounter" value="52" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -588,8 +590,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Add permission classes for GraphQL task mutations&#10;&#10;- Create `app/graphql/permissions.py` with custom Strawberry permission classes (`IsAuthenticated`, `IsHouseAdmin`, `IsHouseAdminForTask`, and `IsTaskBelongToThisUser`).&#10;- Apply corresponding permission classes to task-related mutations in `app/graphql/mutations.py` to enforce role-based access control.&#10;- Fix the `uncompleted_task` mutation query to correctly retrieve and delete the most recent task completion by ordering `completed_at` descending." />
-    <MESSAGE value="Add house deletion, cascading deletes, and update access permissions&#10;&#10;- Create an Alembic migration to add `ON DELETE CASCADE` to foreign keys for `tasks`, `house_users`, `role_house_users`, `task_lives`, and `task_completions`.&#10;- Implement `remove_house` mutation in `app/graphql/mutations.py` for deleting a house.&#10;- Enforce `IsHouseAdmin` permission on `add_user_to_house`, `remove_user_from_house`, and `remove_house` mutations.&#10;- Ensure the user creating a house is automatically assigned the `admin` role in the `create_house` mutation.&#10;- Add `IsTaskBelongToTheUserHouse` permission class in `app/graphql/permissions.py` and apply it to the `get_task_by_id` query.&#10;- Rename the `id` parameter to `task_id` in the `get_task_by_id` query to match the correct argument.&#10;- Update `create_task` mutation to correctly validate user authentication and handle `UserError`." />
     <MESSAGE value="Update `.idea/workspace.xml` and add `requirements.txt`&#10;&#10;- Add Python dependencies to `requirements.txt`.&#10;- Minor modifications to `.idea/workspace.xml`.&#10;- Remove unused root and `/hello` endpoints from `main.py`." />
     <MESSAGE value="Add GitHub Actions workflow for backend deployment&#10;&#10;- Create `.github/workflows/backend-deploy.yml` to automate backend deployment on `main` branch push.&#10;- Use `appleboy/ssh-action` for remote deployment, including pulling updates, installing dependencies, applying migrations, and restarting the service." />
     <MESSAGE value="Fix path case sensitivity in backend deployment workflow&#10;&#10;- Update `cd` command in `.github/workflows/backend-deploy.yml` to use the correct case: `HomeSync`." />
@@ -613,11 +613,13 @@
     <MESSAGE value="Prevent self-removal from a house in `remove_user_from_house` mutation" />
     <MESSAGE value="Include house invite code in email generation for `create_user` mutation to ensure uniqueness" />
     <MESSAGE value="Include user details in `login` mutation response for enhanced client-side context" />
-    <option name="LAST_COMMIT_MESSAGE" value="Include user details in `login` mutation response for enhanced client-side context" />
+    <MESSAGE value="Add `user_configuration` field to user model and implement update mutation&#10;&#10;- Extend `UserModel` with a new `user_configuration` JSON column.&#10;- Update GraphQL schema to include `user_configuration` in user type and queries.&#10;- Add `update_user_configuration` mutation to allow deep merging of user configuration." />
+    <MESSAGE value="Add `user_configuration` JSON column to users table via migration" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `user_configuration` JSON column to users table via migration" />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1775115780197" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/HomeSync$HomeSync.coverage" NAME="HomeSync Coverage Results" MODIFIED="1775638732097" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
   </component>
 </project>

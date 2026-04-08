@@ -47,6 +47,7 @@ class TaskQueries:
                 title=t.title,
                 description=t.description,
                 weight=t.weight,
+                time_to_complete=t.time_to_complete,
                 house=House(
                     id=t.house.id,
                     name=t.house.name,

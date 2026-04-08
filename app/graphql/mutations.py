@@ -65,6 +65,22 @@ class TaskMutations:
         return Task(id=task.id, title=task.title, description=task.description, weight=task.weight)
 
     @strawberry.mutation(permission_classes=[IsHouseAdminForTask])
+    def update_task(self, info: Info, task_id: int, task_title: str, task_description: str, task_weight: int,
+                    task_time_to_complete: int) -> TaskError | Task:
+        db = info.context["db"]
+        task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
+        if not task:
+            return TaskError(message="Task not found")
+        task.title = task_title
+        task.description = task_description
+        task.weight = task_weight
+        task.time_to_complete = task_time_to_complete
+        db.commit()
+        db.refresh(task)
+        return Task(id=task.id, title=task.title, description=task.description, weight=task.weight,
+                    time_to_complete=task.time_to_complete)
+
+    @strawberry.mutation(permission_classes=[IsHouseAdminForTask])
     def delete_task(self, info: Info, task_id: int) -> DeleteTaskSuccess | TaskError:
         db = info.context["db"]
         task = db.query(TaskModel).filter(TaskModel.id == task_id).first()
@@ -346,7 +362,6 @@ class UserMutations:
         db.commit()
         db.refresh(newRoleHouseUser)
 
-
         return User(
             id=new_user.id,
             email=new_user.email,
@@ -385,7 +400,6 @@ class UserMutations:
             name=user.name,
             user_configuration=user.user_configuration
         )
-
 
 
 @strawberry.type

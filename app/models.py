@@ -35,6 +35,7 @@ class Task(Base):
     title = Column(String, index=True)
     description = Column(String, nullable=True)
     weight = Column(Integer)
+    time_to_complete = Column(Integer, nullable=True)
 
     house_id = Column(Integer, ForeignKey("houses.id", ondelete="CASCADE"))
     house = relationship("House", back_populates="tasks")
