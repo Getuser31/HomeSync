@@ -4,12 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add `time_to_complete` field to `Task` model and update related GraphQL mutations and queries&#10;&#10;- Extend `Task` model with `time_to_complete` field.&#10;- Update GraphQL schema to include `time_to_complete` in `Task` type.&#10;- Add `time_to_complete` support to `update_task` mutation.&#10;- Create Alembic migration to modify the database schema.">
-      <change afterPath="$PROJECT_DIR$/alembic/versions/133920bf2a24_add_created_at_time_on_the_task.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/mutations.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/mutations.py" afterDir="false" />
+    <list default="true" id="8f15c681-39f0-46c8-8bc0-df0b60baac8c" name="Changes" comment="Add `date_created` field to `Task` model and update related GraphQL queries and schema&#10;&#10;- Extend `Task` model with a `date_created` column.&#10;- Update GraphQL schema to include `date_created` in `Task` type.&#10;- Reflect `date_created` in GraphQL queries and mutations.&#10;- Add Alembic migration to populate and modify the database schema.">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/backend-deploy.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/backend-deploy.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/app/graphql/queries.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/queries.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/graphql/types.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/graphql/types.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/requirements.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -17,7 +17,7 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="EmbeddingIndexingInfo">
-    <option name="cachedIndexableFilesCount" value="62" />
+    <option name="cachedIndexableFilesCount" value="64" />
     <option name="fileBasedEmbeddingIndicesEnabled" value="true" />
   </component>
   <component name="FileTemplateManagerImpl">
@@ -178,15 +178,10 @@
       <workItem from="1774626021731" duration="1369000" />
       <workItem from="1775115585049" duration="9914000" />
       <workItem from="1775202152909" duration="1193000" />
-      <workItem from="1775638091640" duration="8689000" />
-    </task>
-    <task id="LOCAL-00004" summary="Add Alembic for database migrations&#10;&#10;- Configure Alembic with `alembic.ini` and `env.py`.&#10;- Generate initial migration for `Task` table.&#10;- Add migration to remove redundant index from `Task` table.">
-      <option name="closed" value="true" />
-      <created>1771337652161</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1771337652161</updated>
+      <workItem from="1775638091640" duration="9096000" />
+      <workItem from="1775738613647" duration="1167000" />
+      <workItem from="1775740274050" duration="4056000" />
+      <workItem from="1777114879125" duration="945000" />
     </task>
     <task id="LOCAL-00005" summary="Add user management functionality&#10;&#10;- Define `User` model in `app/models.py` with `id`, `email`, `hashed_password`, and `is_active` fields.&#10;- Implement GraphQL `User` types, queries, and mutations for user data handling.&#10;- Add Alembic migration to create `users` table.">
       <option name="closed" value="true" />
@@ -572,7 +567,15 @@
       <option name="project" value="LOCAL" />
       <updated>1775642418210</updated>
     </task>
-    <option name="localTasksCounter" value="53" />
+    <task id="LOCAL-00053" summary="Add `date_created` field to `Task` model and update related GraphQL queries and schema&#10;&#10;- Extend `Task` model with a `date_created` column.&#10;- Update GraphQL schema to include `date_created` in `Task` type.&#10;- Reflect `date_created` in GraphQL queries and mutations.&#10;- Add Alembic migration to populate and modify the database schema.">
+      <option name="closed" value="true" />
+      <created>1775652841176</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1775652841176</updated>
+    </task>
+    <option name="localTasksCounter" value="54" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -590,7 +593,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="Fix path case sensitivity in backend deployment workflow&#10;&#10;- Update `cd` command in `.github/workflows/backend-deploy.yml` to use the correct case: `HomeSync`." />
     <MESSAGE value="Load environment variables and set database URL in Alembic configuration" />
     <MESSAGE value="Escape '%' character in database URL replacement in Alembic configuration" />
     <MESSAGE value="Expand allowed origins in CORS middleware to include `homesync.fr` and `www.homesync.fr`." />
@@ -615,7 +617,8 @@
     <MESSAGE value="Add `user_configuration` JSON column to users table via migration" />
     <MESSAGE value="Add `time_to_complete` field to the `Task` model and GraphQL schema&#10;&#10;- Extend `TaskModel` with a nullable `time_to_complete` column.&#10;- Update the GraphQL schema, types, and queries to include the `time_to_complete` field.&#10;- Implement `update_task` mutation to allow editing of `time_to_complete` alongside other task attributes." />
     <MESSAGE value="Add `time_to_complete` field to `Task` model and update related GraphQL mutations and queries&#10;&#10;- Extend `Task` model with `time_to_complete` field.&#10;- Update GraphQL schema to include `time_to_complete` in `Task` type.&#10;- Add `time_to_complete` support to `update_task` mutation.&#10;- Create Alembic migration to modify the database schema." />
-    <option name="LAST_COMMIT_MESSAGE" value="Add `time_to_complete` field to `Task` model and update related GraphQL mutations and queries&#10;&#10;- Extend `Task` model with `time_to_complete` field.&#10;- Update GraphQL schema to include `time_to_complete` in `Task` type.&#10;- Add `time_to_complete` support to `update_task` mutation.&#10;- Create Alembic migration to modify the database schema." />
+    <MESSAGE value="Add `date_created` field to `Task` model and update related GraphQL queries and schema&#10;&#10;- Extend `Task` model with a `date_created` column.&#10;- Update GraphQL schema to include `date_created` in `Task` type.&#10;- Reflect `date_created` in GraphQL queries and mutations.&#10;- Add Alembic migration to populate and modify the database schema." />
+    <option name="LAST_COMMIT_MESSAGE" value="Add `date_created` field to `Task` model and update related GraphQL queries and schema&#10;&#10;- Extend `Task` model with a `date_created` column.&#10;- Update GraphQL schema to include `date_created` in `Task` type.&#10;- Reflect `date_created` in GraphQL queries and mutations.&#10;- Add Alembic migration to populate and modify the database schema." />
     <option name="REFORMAT_BEFORE_PROJECT_COMMIT" value="true" />
     <option name="REARRANGE_BEFORE_PROJECT_COMMIT" value="true" />
   </component>

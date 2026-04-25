@@ -28,6 +28,7 @@ class TaskQueries:
                 id=t.id,
                 title=t.title,
                 description=t.description,
+                weight=t.weight,
                 house=House(
                     id=t.house.id,
                     name=t.house.name,

@@ -1,4 +1,5 @@
 import json
+import re
 from fastapi import FastAPI, Depends, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -10,7 +11,13 @@ from app.database import get_db
 from app.auth import decode_access_token
 
 # Operations that do not require authentication
-PUBLIC_OPERATIONS = {"Login", "CreateUser", "Register"}
+PUBLIC_OPERATIONS = {"Login", "CreateUser", "Register", "GetMe", "GetHouseByInviteCode", "GetHouseByUser"}
+
+
+def _extract_operation_name_from_query(query: str) -> str | None:
+    """Extract the operation name from a raw GraphQL query string."""
+    match = re.search(r'(?:mutation|query)\s+(\w+)', query)
+    return match.group(1) if match else None
 
 app = FastAPI()
 
@@ -43,6 +50,13 @@ class AuthMiddleware(BaseHTTPMiddleware):
             body = await request.body()
             data = json.loads(body)
             operation_name = data.get("operationName") or ""
+
+            # Fallback: try to extract the operation name from the raw query
+            if not operation_name:
+                query = data.get("query", "")
+                if query:
+                    operation_name = _extract_operation_name_from_query(query) or ""
+
             if operation_name in PUBLIC_OPERATIONS:
                 # Replay the body so downstream handlers can read it
                 async def receive():
