@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/HomeSync.iml" filepath="$PROJECT_DIR$/.idea/HomeSync.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../home_sync_frontend/.idea/home_sync_frontend.iml" filepath="$PROJECT_DIR$/../home_sync_frontend/.idea/home_sync_frontend.iml" />
     </modules>
   </component>
 </project>
